@@ -49,3 +49,6 @@ redis_data/
 
 # Arquivos internos de estrutura
 estrutura/
+
+# Documentacao interna (passo a passo confidencial)
+CLAUDE.md
