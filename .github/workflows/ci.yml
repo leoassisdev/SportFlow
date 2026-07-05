@@ -1,0 +1,50 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: sportflow
+          POSTGRES_PASSWORD: sportflow_dev
+          POSTGRES_DB: sportflow_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U sportflow"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports: ['6379:6379']
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://sportflow:sportflow_dev@localhost:5432/sportflow_test
+      REDIS_URL: redis://localhost:6379
+      JWT_ACCESS_SECRET: test-access-secret-with-enough-length-1234567890
+      JWT_REFRESH_SECRET: test-refresh-secret-with-enough-length-1234567890
+      CORS_ORIGINS: http://localhost:3000
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Scan de segredos (02-c-SEGURANCA)
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true
+      - run: npm run lint
+      - run: npm run type-check
+      - name: Prisma generate
+        working-directory: apps/api
+        run: npx prisma generate
+      - run: npm run build
+      - run: npm run test

@@ -1,0 +1,34 @@
+name: Deploy Backend (Azure App Service)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/api/**'
+      - 'packages/shared-types/**'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Prisma generate
+        working-directory: apps/api
+        run: npx prisma generate
+      - run: npm run build --workspace=@sportflow/api
+      - name: Deploy para sportflow-api
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: sportflow-api
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_API }}
+          package: apps/api
+# Azure Plan: plan-tcc | Resource Group: rg-webapps
+# SCM Basic Auth Publishing: true | Basic Authentication: true
+# PROIBIDO: zip deploy, az webapp deploy --src-path, upload manual, Kudu
