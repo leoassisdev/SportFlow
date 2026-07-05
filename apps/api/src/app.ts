@@ -15,6 +15,7 @@ import { tenantMiddleware } from './middlewares/tenant.middleware.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { championshipRoutes } from './modules/championship/championship.routes.js';
 import { listPresets } from './modules/championship/sport-presets.js';
+import { liveRoutes } from './modules/live/live.routes.js';
 import { participantRoutes } from './modules/participant/participant.routes.js';
 import { logger } from './shared/logger.js';
 
@@ -52,8 +53,8 @@ export const buildApp = (): Express => {
 
   // Rotas publicas
   app.use('/api/v1/auth', authRoutes);
-
-  // TODO Fase 3+: /api/v1/live, /api/v1/webhooks
+  app.use('/api/v1/live', liveRoutes);
+  // TODO Fase 6: /api/v1/webhooks/stripe
 
   // Middleware chain (rotas protegidas)
   app.use(authMiddleware);
