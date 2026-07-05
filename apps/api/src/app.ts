@@ -24,6 +24,7 @@ import { matchRoutes } from './modules/match/match.routes.js';
 import { participantRoutes } from './modules/participant/participant.routes.js';
 import { superadminRoutes } from './modules/superadmin/superadmin.routes.js';
 import { logger } from './shared/logger.js';
+import { metricsHandler, metricsMiddleware } from './shared/metrics.js';
 
 export const buildApp = (): Express => {
   const app = express();
@@ -41,8 +42,10 @@ export const buildApp = (): Express => {
   app.use(cookieParser());
   app.use(express.json({ limit: '1mb' }));
   app.use(pinoHttp({ logger }));
+  app.use(metricsMiddleware);
 
   // Healthcheck e metrics (publicos)
+  app.get('/metrics', (req, res) => metricsHandler(req, res).catch(() => res.status(500).end()));
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
