@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { authRateLimit } from '../../middlewares/rateLimit.middleware.js';
 import { authController } from './auth.controller.js';
+import { devLoginRoutes } from './dev-login.routes.js';
 import { googleAuthRoutes } from './google.routes.js';
 
 const router = Router();
 
+router.use('/dev-login', devLoginRoutes);
 router.use('/google', googleAuthRoutes);
 
 router.post('/register', authRateLimit, (req, res, next) =>
