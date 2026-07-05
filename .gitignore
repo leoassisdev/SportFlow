@@ -2,12 +2,14 @@
 node_modules/
 .pnp
 .pnp.js
+.npm
 
 # Build
 dist/
 build/
 .next/
 out/
+next-env.d.ts
 
 # Environment
 .env
@@ -16,6 +18,7 @@ out/
 .env.staging
 .env.production
 .env*.local
+!.env.example
 
 # IDE
 .vscode/
