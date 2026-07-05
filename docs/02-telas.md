@@ -1,45 +1,45 @@
 # Mapa de Telas — SportFlow
 
-**Agente responsavel:** 02-analista-de-tela
+**Agente responsável:** 02-analista-de-tela
 **Base:** docs/01-prd.md + imagens em `imagens/geral/` e `imagens/{esporte}/`
-**Referencias visuais:** fundo dark de arena/quadra, azul neon + laranja como acentos, tipografia esportiva (ver `imagens/geral/hero-desktop.png` e `logo.png`).
+**Referências visuais:** fundo dark de arena/quadra, azul neon + laranja como acentos, tipografia esportiva (ver `imagens/geral/hero-desktop.png` e `logo.png`).
 
 ---
 
 ## 1. Inventario de Telas
 
-### Publicas (sem auth)
+### Públicas (sem auth)
 | Rota | Perfil | Objetivo |
 |------|--------|----------|
-| `/` | Publico | Landing institucional (breve) + CTA "Comecar teste gratis" |
-| `/login` | Publico | Login de Owner/Member/SuperAdmin |
-| `/register` | Publico | Cadastro de lead → cria tenant preview |
-| `/live/[token]` | Espectador | Placar publico do match, SSR + Socket.io read-only |
-| `/payment/success` | Publico | Confirmacao pos-Stripe |
-| `/payment/cancel` | Publico | Cancelamento pos-Stripe |
-| `/404` / `/500` | Publico | Erros amigaveis com tema esportivo |
+| `/` | Público | Landing institucional (breve) + CTA "Comecar teste gratis" |
+| `/login` | Público | Login de Owner/Member/SuperAdmin |
+| `/register` | Público | Cadastro de lead → cria tenant preview |
+| `/live/[token]` | Espectador | Placar público do match, SSR + Socket.io read-only |
+| `/payment/success` | Público | Confirmação pos-Stripe |
+| `/payment/cancel` | Público | Cancelamento pos-Stripe |
+| `/404` / `/500` | Público | Erros amigaveis com tema esportivo |
 
 ### Dashboard (Owner + Member)
 | Rota | Perfil | Objetivo |
 |------|--------|----------|
-| `/dashboard` | Owner/Member | Home: cards com campeonatos ativos, proximo jogo, saldo financeiro |
+| `/dashboard` | Owner/Member | Home: cards com campeonatos ativos, próximo jogo, saldo financeiro |
 | `/championships` | Owner/Member | Lista de campeonatos |
 | `/championships/new` | Owner | Criar campeonato + escolher esporte |
-| `/championships/[id]` | Owner/Member | Detalhe do campeonato, tabs (visao geral, participantes, jogos, financeiro, exportacoes) |
+| `/championships/[id]` | Owner/Member | Detalhe do campeonato, tabs (visao geral, participantes, jogos, financeiro, exportações) |
 | `/championships/[id]/participants` | Owner/Member | CRUD participantes |
 | `/championships/[id]/matches` | Owner/Member | Lista de jogos (agendados/em andamento/finalizados) |
 | `/championships/[id]/matches/[matchId]` | Owner/Member | Painel de controle do placar (com escrita) |
 | `/championships/[id]/financial` | Owner (Member se autorizado) | Receitas, despesas, patrocinadores |
-| `/championships/[id]/export` | Owner | Solicitar/acompanhar exportacoes |
-| `/settings` | Owner | Perfil, senha, membros do tenant, licenca atual |
+| `/championships/[id]/export` | Owner | Solicitar/acompanhar exportações |
+| `/settings` | Owner | Perfil, senha, membros do tenant, licença atual |
 
 ### SuperAdmin (FlowCore-only)
 | Rota | Perfil | Objetivo |
 |------|--------|----------|
-| `/superadmin` | SuperAdmin | Dashboard de metricas (MRR, tenants ativos, leads, campeonatos criados) |
-| `/superadmin/tenants` | SuperAdmin | Tabela de tenants (status, licenca, criacao) |
+| `/superadmin` | SuperAdmin | Dashboard de métricas (MRR, tenants ativos, leads, campeonatos criados) |
+| `/superadmin/tenants` | SuperAdmin | Tabela de tenants (status, licença, criação) |
 | `/superadmin/tenants/[id]` | SuperAdmin | Detalhe + override (com log) |
-| `/superadmin/licenses` | SuperAdmin | CRUD licencas, gerar link Stripe |
+| `/superadmin/licenses` | SuperAdmin | CRUD licenças, gerar link Stripe |
 | `/superadmin/leads` | SuperAdmin | Leads recentes (preview sem pagamento) |
 | `/superadmin/audit-logs` | SuperAdmin | Busca em logs de auditoria |
 
@@ -50,10 +50,10 @@
 Toda tela deve ter estados explicitos:
 - **loading** → Skeleton com shimmer no tema dark
 - **success** → conteudo renderizado
-- **empty** → ilustracao esportiva + CTA para proxima acao
+- **empty** → ilustracao esportiva + CTA para próxima ação
 - **error** → mensagem clara + botao "tentar novamente" + link para suporte
-- **unauthorized (403)** → tela com CTA para renovar licenca (se expirada) ou solicitar acesso (se permissao)
-- **preview limited** → banner topo "Modo preview — recurso bloqueado. [Ativar licenca]"
+- **unauthorized (403)** → tela com CTA para renovar licença (se expirada) ou solicitar acesso (se permissão)
+- **preview limited** → banner topo "Modo preview — recurso bloqueado. [Ativar licença]"
 
 ---
 
@@ -63,30 +63,30 @@ Toda tela deve ter estados explicitos:
 
 **Objetivo:** Coletar dados minimos, criar tenant preview, redirecionar para `/dashboard`.
 
-**Campos (obrigatorios):**
+**Campos (obrigatórios):**
 - Nome completo (input)
-- Email (input, validacao de formato)
+- Email (input, validação de formato)
 - WhatsApp (input com mascara BR)
 - Senha (input com forca visual: fraca/media/forte)
-- Esporte principal (select: futebol, volei, tenis, skate)
-- Nome do time/liga/organizacao (input — vira `tenant.name`)
+- Esporte principal (select: futebol, vôlei, tênis, skate)
+- Nome do time/liga/organização (input — vira `tenant.name`)
 
 **Campos opcionais:**
 - Como conheceu? (select analytics)
 
-**Acoes:**
+**Ações:**
 - Botao primario "Comecar teste gratis" → POST /api/v1/auth/register
-- Link "Ja tenho conta" → /login
+- Link "Já tenho conta" → /login
 
 **Estados:**
 - loading (submit em progresso)
 - success (redirect + toast)
-- error de validacao inline por campo
+- error de validação inline por campo
 - error de email duplicado → mensagem + link para /login
 
 **Regras (RN):**
 - RN-012: rate limit 10 req/min
-- RN-002: apos criar, tenant fica em modo `preview`
+- RN-002: após criar, tenant fica em modo `preview`
 
 ---
 
@@ -94,9 +94,9 @@ Toda tela deve ter estados explicitos:
 
 **Objetivo:** Autenticar e redirecionar para dashboard (Owner/Member) ou `/superadmin` (SuperAdmin).
 
-**Campos:** email + senha + checkbox "manter conectado" (afeta refresh, nao access token).
+**Campos:** email + senha + checkbox "manter conectado" (afeta refresh, não access token).
 
-**Acoes:**
+**Ações:**
 - "Entrar" → POST /api/v1/auth/login
 - "Esqueci senha" → modal ou `/forgot-password`
 - "Criar conta" → /register
@@ -113,14 +113,14 @@ Toda tela deve ter estados explicitos:
 
 ### 3.3 `/dashboard` (Owner/Member)
 
-**Objetivo:** Panorama rapido do tenant.
+**Objetivo:** Panorama rápido do tenant.
 
 **Blocos:**
-- **Header:** logo + nome do tenant + selector de tenant (se membro em multiplos) + badge de licenca (`preview` amarelo / `active` verde / `expiring` laranja / `expired` vermelho) + avatar do usuario.
-- **Card KPI 1:** Campeonatos ativos (numero grande + esporte icon).
-- **Card KPI 2:** Proximo jogo agendado (contagem regressiva + botao "abrir placar").
+- **Header:** logo + nome do tenant + selector de tenant (se membro em multiplos) + badge de licença (`preview` amarelo / `active` verde / `expiring` laranja / `expired` vermelho) + avatar do usuario.
+- **Card KPI 1:** Campeonatos ativos (número grande + esporte icon).
+- **Card KPI 2:** Próximo jogo agendado (contagem regressiva + botao "abrir placar").
 - **Card KPI 3:** Saldo financeiro (do campeonato ativo — se >1, seletor).
-- **Card KPI 4:** Placares publicos ativos agora (com link).
+- **Card KPI 4:** Placares públicos ativos agora (com link).
 - **Lista:** Campeonatos recentes (top 5) com esporte, status, participantes, botao "abrir".
 - **CTA lateral:** "Criar campeonato" (primario laranja).
 
@@ -136,28 +136,28 @@ Toda tela deve ter estados explicitos:
 
 **Elementos:**
 - Barra de busca (nome)
-- Filtros: esporte (chips), status (chips), periodo (date range)
+- Filtros: esporte (chips), status (chips), período (date range)
 - Botao "Criar campeonato" (destaque)
-- Tabela / cards responsivos: nome, esporte, status, participantes, inicio, acao
+- Tabela / cards responsivos: nome, esporte, status, participantes, inicio, ação
 
 **Estados:** loading (skeleton rows), empty (com CTA), error, paginacao.
 
 ---
 
-### 3.5 `/championships/new` — Wizard de Criacao
+### 3.5 `/championships/new` — Wizard de Criação
 
 **Objetivo:** Fluxo guiado em passos.
 
 **Steps:**
-1. **Esporte** → cards visuais grandes (futebol, volei, tenis, skate) com imagens de `imagens/{esporte}/background-01.png`.
-2. **Info basica** → nome, datas inicio/fim, descricao.
-3. **Configuracao** → preenchido com `sport-presets`, editavel (n de sets, pontos por set, tempo de partida, rounds, etc).
-4. **Categorias** → nome + criterio (idade/peso/genero/livre) — opcional.
+1. **Esporte** → cards visuais grandes (futebol, vôlei, tênis, skate) com imagens de `imagens/{esporte}/background-01.png`.
+2. **Info básica** → nome, datas inicio/fim, descrição.
+3. **Configuração** → preenchido com `sport-presets`, editavel (n de sets, pontos por set, tempo de partida, rounds, etc).
+4. **Categorias** → nome + critério (idade/peso/genero/livre) — opcional.
 5. **Revisao** → resumo + botao "Criar" → redireciona para detalhe.
 
 **Regras:**
-- RN-014: apos criar, `sportType` e imutavel
-- RN-002: tenant preview so pode ter 1 campeonato ativo + max 3 participantes
+- RN-014: após criar, `sportType` e imutavel
+- RN-002: tenant preview só pode ter 1 campeonato ativo + max 3 participantes
 
 ---
 
@@ -168,28 +168,28 @@ Toda tela deve ter estados explicitos:
 **Header:** nome, esporte (icon), status (badge), datas, CTA "Novo jogo" + menu (editar, arquivar).
 
 **Tabs:**
-- Visao geral (KPIs, proximos jogos, ultimos placares)
+- Visao geral (KPIs, próximos jogos, últimos placares)
 - Participantes
 - Jogos
 - Financeiro (bloqueado preview)
-- Exportacoes (bloqueado preview)
+- Exportações (bloqueado preview)
 
 ---
 
 ### 3.7 `/championships/[id]/matches/[matchId]` — Painel do Placar (ADMIN)
 
-**Objetivo:** Controlar placar e timer em tempo real. Tela MAIS critica do sistema.
+**Objetivo:** Controlar placar e timer em tempo real. Tela MAIS crítica do sistema.
 
-**Layout (responsivo, mobile-first porque arbitro usa no celular):**
-- **Topo:** Campeonato + esporte + status (agendado/ao vivo/finalizado) + botao "compartilhar link publico" (copia `/live/{token}`).
+**Layout (responsivo, mobile-first porque árbitro usa no celular):**
+- **Topo:** Campeonato + esporte + status (agendado/ao vivo/finalizado) + botao "compartilhar link público" (copia `/live/{token}`).
 - **Placar central (60% tela):**
   - Nome participante casa + placar gigante (font 96px+)
   - Separador visual (vs + timer se hasTimer)
   - Nome participante fora + placar gigante
 - **Controles por participante:** botoes `+1`, `+2`, `+3` (varia por esporte), `undo`.
-- **Timer:** display + botoes start/pause/reset (visivel so se `hasTimer=true`).
-- **Historico lateral:** ultimos 10 lancamentos com timestamp + autor.
-- **Footer:** botao "Finalizar jogo" (confirmacao) + "abrir placar publico em nova aba".
+- **Timer:** display + botoes start/pause/reset (visivel só se `hasTimer=true`).
+- **Histórico lateral:** últimos 10 lancamentos com timestamp + autor.
+- **Footer:** botao "Finalizar jogo" (confirmação) + "abrir placar público em nova aba".
 
 **Regras:**
 - RN-009: score entry imutavel — undo cria negativa
@@ -199,13 +199,13 @@ Toda tela deve ter estados explicitos:
 **Estados especiais:**
 - offline banner "Sem conexao — mudancas ficam em fila local"
 - reconectando spinner discreto no topo
-- ja finalizado → placar somente leitura com selo "FINALIZADO"
+- já finalizado → placar somente leitura com selo "FINALIZADO"
 
-**Visual:** placar imita "telao de arena" (`imagens/geral/placar-live.png`) — fundo dark, numeros brancos com brilho azul.
+**Visual:** placar imita "telao de arena" (`imagens/geral/placar-live.png`) — fundo dark, números brancos com brilho azul.
 
 ---
 
-### 3.8 `/live/[token]` — Placar Publico (SSR)
+### 3.8 `/live/[token]` — Placar Público (SSR)
 
 **Objetivo:** Espectador ve placar em tempo real, sem interacao.
 
@@ -213,12 +213,12 @@ Toda tela deve ter estados explicitos:
 - Header pequeno: nome do campeonato + esporte + status "AO VIVO" pulsando
 - Placar gigante (mesmo estilo do admin, mas sem controles)
 - Timer central (se aplicavel)
-- Rodape: powered by SportFlow + link para site + logo pequeno
+- Rodapé: powered by SportFlow + link para site + logo pequeno
 - Se tenant em preview: marca d'agua diagonal semi-transparente "MODO PREVIEW"
 
-**Requisitos criticos:**
+**Requisitos críticos:**
 - Renderiza no servidor com dados iniciais (sem flicker)
-- Apos hydration, conecta Socket.io
+- Após hydration, conecta Socket.io
 - Meta tags OpenGraph com placar atual (para preview no WhatsApp)
 - Mobile-first (a maioria vai abrir no celular)
 - Contraste alto para leitura em ambiente externo (arena, quadra)
@@ -232,73 +232,73 @@ Toda tela deve ter estados explicitos:
 
 **Blocos:**
 - **KPIs:** Total receita (verde), Total despesa (vermelho), Saldo (verde/vermelho conforme), Patrocinadores ativos.
-- **Grafico:** barras por mes ou pizza por categoria.
-- **Botao:** "Nova transacao" → modal (tipo, categoria, valor, descricao, data, patrocinador).
-- **Tabela:** todas as transacoes com filtro (tipo/categoria/data), acoes (editar, excluir).
-- **Export rapido:** botao "Exportar CSV" (enfileira job).
+- **Gráfico:** barras por mes ou pizza por categoria.
+- **Botao:** "Nova transação" → modal (tipo, categoria, valor, descrição, data, patrocinador).
+- **Tabela:** todas as transações com filtro (tipo/categoria/data), ações (editar, excluir).
+- **Export rápido:** botao "Exportar CSV" (enfileira job).
 
-**Bloqueado em preview** → tela mostra call-out gigante "Ative sua licenca para desbloquear o financeiro" com CTA.
+**Bloqueado em preview** → tela mostra call-out gigante "Ative sua licença para desbloquear o financeiro" com CTA.
 
 ---
 
 ### 3.10 `/championships/[id]/export`
 
-**Objetivo:** Solicitar exportacoes e acompanhar jobs.
+**Objetivo:** Solicitar exportações e acompanhar jobs.
 
 **Blocos:**
 - **Novo export:** cards de formato (PDF/CSV) + checklist de modulos (resultados, financeiro, participantes) + botao "Gerar".
 - **Fila:** lista dos jobs (status: pending/processing/completed/failed) com timestamps e link de download quando pronto.
-- **Job pronto → notificacao toast** + Socket.io atualiza tabela em tempo real.
+- **Job pronto → notificação toast** + Socket.io atualiza tabela em tempo real.
 
 ---
 
 ### 3.11 `/settings`
 
-**Objetivo:** Configuracoes do tenant e usuario.
+**Objetivo:** Configurações do tenant e usuario.
 
 **Tabs:**
 - Perfil (nome, email, foto, senha)
-- Membros (lista + convite por email + toggle de permissoes)
-- Licenca (plano atual, dias restantes, historico de pagamentos, botao "renovar")
-- Preferencias (idioma futuro, notificacoes)
+- Membros (lista + convite por email + toggle de permissões)
+- Licença (plano atual, dias restantes, histórico de pagamentos, botao "renovar")
+- Preferencias (idioma futuro, notificações)
 
 ---
 
 ### 3.12 `/superadmin` — Dashboard FlowCore
 
-**Objetivo:** Metricas para o time comercial/tecnico interno.
+**Objetivo:** Métricas para o time comercial/técnico interno.
 
 **KPIs no topo:** MRR, tenants ativos, novos leads no mes, campeonatos criados no mes, uptime.
 
-**Graficos:** MRR ao longo dos meses, novos tenants por mes, leads convertidos vs perdidos.
+**Gráficos:** MRR ao longo dos meses, novos tenants por mes, leads convertidos vs perdidos.
 
-**Alertas:** licencas expirando em 7d, tenants sem atividade em 30d.
+**Alertas:** licenças expirando em 7d, tenants sem atividade em 30d.
 
 ---
 
 ### 3.13 `/superadmin/tenants` e `/superadmin/licenses`
 
-**Tabela padrao com:** busca, filtro por status, acoes (ver detalhe, criar licenca, pausar, excluir).
+**Tabela padrão com:** busca, filtro por status, ações (ver detalhe, criar licença, pausar, excluir).
 
-**Criar licenca (modal):** tenantId (autocomplete), dias, preco em BRL, gera link Stripe, botao "Enviar por email".
+**Criar licença (modal):** tenantId (autocomplete), dias, preço em BRL, gera link Stripe, botao "Enviar por email".
 
 ---
 
 ### 3.14 `/superadmin/leads`
 
-**Tabela:** email, WhatsApp, esporte, data cadastro, ultima atividade, botao "Contactar" (link WhatsApp Web pre-preenchido) + "Criar licenca".
+**Tabela:** email, WhatsApp, esporte, data cadastro, última atividade, botao "Contactar" (link WhatsApp Web pre-preenchido) + "Criar licença".
 
 ---
 
 ### 3.15 `/superadmin/audit-logs`
 
-**Busca:** tenant, usuario, acao, periodo. Tabela detalhada com JSON expandivel para payload.
+**Busca:** tenant, usuario, ação, período. Tabela detalhada com JSON expandivel para payload.
 
 ---
 
 ## 4. Componentes reutilizaveis
 
-- `<SportBadge sport="futebol|volei|tenis|skate" />` — icon + cor
+- `<SportBadge sport="futebol|vôlei|tênis|skate" />` — icon + cor
 - `<LicenseStatus status="preview|active|expiring|expired" />` — badge com cor
 - `<Scoreboard mode="admin|public" match={...} />` — placar principal
 - `<GameTimer serverTime={} isRunning={} />` — timer sincronizado
@@ -310,22 +310,22 @@ Toda tela deve ter estados explicitos:
 
 ---
 
-## 5. Fluxos criticos (end-to-end)
+## 5. Fluxos críticos (end-to-end)
 
-### F1: Cadastro → Placar publico ativo
+### F1: Cadastro → Placar público ativo
 `/register` → `/dashboard` (preview) → `/championships/new` → detalhe → criar participantes → criar match → painel do placar → copiar link → abrir `/live/[token]` em outra aba → funciona.
 
-### F2: Ativacao de licenca
-SuperAdmin em `/superadmin/licenses/new` → seleciona tenant + dias + preco → gera Stripe URL → envia email → lead paga → webhook ativa tenant → banner preview some.
+### F2: Ativação de licença
+SuperAdmin em `/superadmin/licenses/new` → seleciona tenant + dias + preço → gera Stripe URL → envia email → lead paga → webhook ativa tenant → banner preview some.
 
 ### F3: Expiracao
-License worker (hora em hora) marca `expired` → middleware retorna 403 nas rotas protegidas → dashboard mostra tela "renovar" → Owner clica → SuperAdmin cria nova licenca.
+License worker (hora em hora) marca `expired` → middleware retorna 403 nas rotas protegidas → dashboard mostra tela "renovar" → Owner clica → SuperAdmin cria nova licença.
 
-### F4: Exportacao
+### F4: Exportação
 `/export` → escolher PDF + modulos → job enfileirado → banner "gerando..." → Socket.io recebe `export:ready` → tabela atualiza → download.
 
 ### F5: Placar em partida real
-Arbitro abre no celular em `/matches/[id]` → +1/-1 nos botoes gigantes → 20 espectadores em `/live/[token]` veem tudo instant.
+Árbitro abre no celular em `/matches/[id]` → +1/-1 nos botoes gigantes → 20 espectadores em `/live/[token]` veem tudo instant.
 
 ---
 
@@ -342,17 +342,17 @@ Arbitro abre no celular em `/matches/[id]` → +1/-1 nos botoes gigantes → 20 
 - Todos inputs com `label` visivel + `data-testid`
 - Botoes com contraste minimo 4.5:1 no tema dark
 - `aria-live="polite"` no placar admin para lancamentos
-- `aria-live="assertive"` no placar publico para mudancas de score
+- `aria-live="assertive"` no placar público para mudancas de score
 - Focus visivel com anel azul neon
 - Textos com `lang="pt-BR"`
-- Navegacao 100% teclado nas telas criticas
+- Navegacao 100% teclado nas telas críticas
 
 ---
 
 ## Handoff para 05-arquiteto-designer
 
 - **Paleta base sugerida:** dark #0A0E1A, primary blue #00A3FF, accent orange #FF6B00, success green, warning yellow, danger red.
-- **Tipografia sugerida:** Titulos `Barlow` ou `Rubik` (esportivo, condensed disponivel para placar). Corpo `Inter` (legibilidade).
+- **Tipografia sugerida:** Titulos `Barlow` ou `Rubik` (esportivo, condensed disponível para placar). Corpo `Inter` (legibilidade).
 - **Motion:** entradas suaves (fade + slide 200ms), pulso no badge AO VIVO, contagem regressiva animada, placar com "bump" (scale 1.1 → 1.0) ao mudar.
 - **Assets prontos:** `imagens/geral/*.png` para heroes + `imagens/{esporte}/background-0X.png` para telas de esporte.
 

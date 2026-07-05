@@ -121,7 +121,7 @@ export default function NewChampionshipPage() {
       {step === 'config' ? (
         <div className="card space-y-4 text-sm text-ink-100">
           <p>
-            Configuracao padrao para <b className="text-white">{sport}</b> ja aplicada. Ajustes finos na versao real.
+            Configuração padrão para <b className="text-white">{sport}</b> já aplicada. Ajustes finos na versão real.
           </p>
           <pre className="rounded-xl bg-ink-950 p-4 font-mono text-xs">
             {JSON.stringify(
@@ -145,7 +145,7 @@ export default function NewChampionshipPage() {
 
       {step === 'categorias' ? (
         <div className="card space-y-3">
-          <p className="text-sm text-ink-100">Categorias sao opcionais no MVP.</p>
+          <p className="text-sm text-ink-100">Categorias são opcionais no MVP.</p>
           <input className="input-base" placeholder="Ex: Masculino sub-17" />
           <button className="btn-ghost text-xs" type="button">
             + Adicionar categoria

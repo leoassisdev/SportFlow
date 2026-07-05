@@ -50,7 +50,7 @@ export default function LandingPage() {
                 Comecar teste gratis
               </Link>
               <Link href="/login" className="btn-ghost">
-                Ja tenho conta
+                Já tenho conta
               </Link>
             </div>
             <div className="mt-10 flex flex-wrap gap-3">

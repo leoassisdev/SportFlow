@@ -26,8 +26,8 @@ export default function ChampionshipDetailPage({ params }: { params: { id: strin
       <div className="mx-auto max-w-2xl">
         <div className="card text-center">
           <p className="text-4xl">🚫</p>
-          <h3 className="mt-3 font-display text-xl font-bold">Campeonato nao encontrado</h3>
-          <p className="mt-1 text-sm text-ink-100">Pode ter sido excluido ou voce nao tem acesso.</p>
+          <h3 className="mt-3 font-display text-xl font-bold">Campeonato não encontrado</h3>
+          <p className="mt-1 text-sm text-ink-100">Pode ter sido excluido ou voce não tem acesso.</p>
           <Link href="/championships" className="btn-primary mt-4 text-xs">
             Voltar para a lista
           </Link>
@@ -72,18 +72,18 @@ export default function ChampionshipDetailPage({ params }: { params: { id: strin
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="card">
-          <h2 className="font-display text-lg font-bold">Configuracao</h2>
+          <h2 className="font-display text-lg font-bold">Configuração</h2>
           <pre className="mt-3 rounded-xl bg-ink-950 p-4 font-mono text-xs text-ink-100">
             {JSON.stringify(c.rulesConfig ?? {}, null, 2)}
           </pre>
         </div>
         <div className="card">
-          <h2 className="font-display text-lg font-bold">Proximos passos</h2>
+          <h2 className="font-display text-lg font-bold">Próximos passos</h2>
           <ol className="mt-3 space-y-2 text-sm text-ink-100">
-            <li>1. Cadastre participantes (aba proxima versao).</li>
+            <li>1. Cadastre participantes (aba próxima versão).</li>
             <li>2. Crie jogos entre os participantes.</li>
             <li>3. Abra o painel de placar e comece a marcar.</li>
-            <li>4. Copie o link publico e compartilhe com os espectadores.</li>
+            <li>4. Copie o link público e compartilhe com os espectadores.</li>
           </ol>
         </div>
       </div>

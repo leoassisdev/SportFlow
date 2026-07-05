@@ -10,11 +10,11 @@ import { asApiError } from '@/lib/api';
 export const dynamic = 'force-dynamic';
 
 const GOOGLE_ERR_MSG: Record<string, string> = {
-  google_no_code: 'Autorizacao Google incompleta.',
-  google_state: 'Sessao Google invalida (CSRF). Tente novamente.',
-  google_unauthorized: 'Nao foi possivel validar sua conta Google.',
+  google_no_code: 'Autorização Google incompleta.',
+  google_state: 'Sessão Google inválida (CSRF). Tente novamente.',
+  google_unauthorized: 'Não foi possível validar sua conta Google.',
   google_failed: 'Falha no login Google. Tente de novo.',
-  google_disabled: 'Login Google indisponivel no momento.',
+  google_disabled: 'Login Google indisponível no momento.',
 };
 
 export default function LoginPage() {
@@ -104,7 +104,7 @@ function LoginInner() {
         </button>
       </form>
       <p className="mt-6 text-sm text-ink-100">
-        Ainda nao tem conta?{' '}
+        Ainda não tem conta?{' '}
         <Link href="/register" className="text-brand-400 hover:text-brand-300">
           Cadastre-se em 30 segundos
         </Link>

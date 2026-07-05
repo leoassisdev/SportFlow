@@ -21,7 +21,7 @@ export default function MatchAdminPage({ params }: { params: { id: string; match
         </div>
         <div className="flex gap-2">
           <Link href="/live/demo-token" target="_blank" className="btn-ghost text-xs">
-            Abrir placar publico ↗
+            Abrir placar público ↗
           </Link>
           <Link href={`/championships/${params.id}`} className="btn-ghost text-xs">
             Voltar
@@ -101,11 +101,11 @@ export default function MatchAdminPage({ params }: { params: { id: string; match
             </button>
           </div>
           <p className="mt-3 text-xs text-ink-100">
-            Timer server-authoritative na implementacao real (Fase 3).
+            Timer server-authoritative na implementação real (Fase 3).
           </p>
         </div>
         <div className="card">
-          <h2 className="font-display text-lg font-bold">Historico (mock)</h2>
+          <h2 className="font-display text-lg font-bold">Histórico (mock)</h2>
           <ul className="mt-2 space-y-1 text-sm">
             <li>42:00 - Bairro Alto marca +1</li>
             <li>38:12 - Vila Norte marca +1</li>

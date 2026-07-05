@@ -27,7 +27,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               acontece.
             </p>
             <p className="mt-4 max-w-md text-ink-100 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-              Do primeiro apito ao relatorio final — SportFlow entrega o
+              Do primeiro apito ao relatório final — SportFlow entrega o
               controle do seu campeonato em tempo real.
             </p>
           </div>

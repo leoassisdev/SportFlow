@@ -1,6 +1,6 @@
 # Arquitetura Frontend — SportFlow
 
-**Agente responsavel:** 04-arquiteto-it-valley-frontend
+**Agente responsável:** 04-arquiteto-it-valley-frontend
 **Stack:** Next.js 14 (App Router) + React 18 + TypeScript + Tailwind CSS + shadcn/ui + Axios + Socket.io client + Zustand (state global leve) + React Query (server state) + Framer Motion (motion)
 
 ---
@@ -12,7 +12,7 @@ apps/web/
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx                     # root layout (fonts, providers)
-│   │   ├── page.tsx                       # landing publica
+│   │   ├── page.tsx                       # landing pública
 │   │   ├── globals.css                    # Tailwind + tokens
 │   │   ├── (auth)/
 │   │   │   ├── layout.tsx                 # split visual login/register
@@ -42,7 +42,7 @@ apps/web/
 │   │   │   ├── leads/
 │   │   │   └── audit-logs/
 │   │   ├── live/
-│   │   │   └── [token]/page.tsx           # SSR publico
+│   │   │   └── [token]/page.tsx           # SSR público
 │   │   ├── payment/
 │   │   │   ├── success/page.tsx
 │   │   │   └── cancel/page.tsx
@@ -115,7 +115,7 @@ apps/web/
 
 - `(auth)` — layout com split visual, sem sidebar.
 - `(dashboard)` — layout com Sidebar (colapsavel) + Topbar (tenant switcher + user menu).
-- `(superadmin)` — layout escuro com badge "FLOWCORE" no header, sem opcao de trocar tenant.
+- `(superadmin)` — layout escuro com badge "FLOWCORE" no header, sem opção de trocar tenant.
 - `live/[token]` — SSR puro, minimalista, sem cookies, sem tracking.
 
 Rotas `/api/*` do Next apenas para health check — todo backend real e Express separado.
@@ -128,7 +128,7 @@ Rotas `/api/*` do Next apenas para health check — todo backend real e Express 
 export function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
 
-  // publicas
+  // públicas
   const publicPaths = ['/', '/login', '/register', '/forgot-password', '/privacidade']
   if (publicPaths.includes(path) || path.startsWith('/live/') || path.startsWith('/payment/')) {
     return NextResponse.next()
@@ -148,7 +148,7 @@ export const config = {
 }
 ```
 
-Verificacao dupla: middleware (edge, rapido) + Server Component (checa role real e trata expiracao/refresh).
+Verificacao dupla: middleware (edge, rápido) + Server Component (checa role real e trata expiracao/refresh).
 
 ---
 
@@ -224,7 +224,7 @@ export function useLiveScore({ matchId, liveToken, isAdmin }: Args) {
 
 - Todo `service.*` retorna Promise → wrapper em hook `use*` com React Query.
 - `queryKey` sempre inclui `tenantId` (implicito via cookie) e filtros.
-- Invalidacao automatica em mutations relevantes.
+- Invalidacao automática em mutations relevantes.
 - Retry: 1 no GET, 0 no POST/PATCH/DELETE.
 
 ---
@@ -234,9 +234,9 @@ export function useLiveScore({ matchId, liveToken, isAdmin }: Args) {
 Apenas coisas realmente globais e efemeras:
 - Sidebar open/collapsed
 - Toast queue
-- Tenant atual selecionado (se membro em varios) — persistido em cookie tambem
+- Tenant atual selecionado (se membro em varios) — persistido em cookie também
 
-**Nao** guardar dados de dominio no Zustand — isso e responsabilidade do React Query.
+**Não** guardar dados de dominio no Zustand — isso e responsabilidade do React Query.
 
 ---
 
@@ -295,7 +295,7 @@ extend: {
 ## 10. Formularios
 
 - React Hook Form + Zod resolver.
-- Validacao inline com mensagem embaixo do campo.
+- Validação inline com mensagem embaixo do campo.
 - Botao submit desabilita durante request.
 - Toast de sucesso/erro depois.
 
@@ -309,7 +309,7 @@ extend: {
 
 ---
 
-## 12. SSR do placar publico
+## 12. SSR do placar público
 
 `app/live/[token]/page.tsx` e um **Server Component** que:
 1. `fetch('/api/v1/live/{token}')` no server (com timeout 3s)
@@ -322,16 +322,16 @@ Meta tags dinamicas (`generateMetadata`) com nome do campeonato + placar atual �
 
 ## 13. Acessibilidade
 
-- shadcn/ui ja implementa a11y correta em dialog/menu/tooltip.
-- Every button has aria-label quando so tem icon.
+- shadcn/ui já implementa a11y correta em dialog/menu/tooltip.
+- Every button has aria-label quando só tem icon.
 - Focus visivel com `ring-2 ring-brand`.
-- Placar publico com `aria-live="assertive"` para leitores de tela.
+- Placar público com `aria-live="assertive"` para leitores de tela.
 
 ---
 
 ## 14. Performance
 
-- Server Components por padrao no App Router.
+- Server Components por padrão no App Router.
 - Client Components explicitos (`'use client'`) apenas quando necessario.
 - Imagens via `next/image` com `sizes` corretos.
 - Fonts via `next/font` (Inter + Barlow) — self-hosted.
@@ -349,7 +349,7 @@ Meta tags dinamicas (`generateMetadata`) com nome do campeonato + placar atual �
 
 ## 16. Handoff
 
-- Para **05-designer:** paleta e tokens ja definidos aqui; validar contraste WCAG AA nos backgrounds.
+- Para **05-designer:** paleta e tokens já definidos aqui; validar contraste WCAG AA nos backgrounds.
 - Para **09-dev-frontend:** este documento + skeleton bootstrapado.
 - Para **03-backend:** contratos DTO ficam em `packages/shared-types`.
-- Para **13-qa-tela:** `data-testid` obrigatorio em botoes, inputs, cards de lista, badges de status.
+- Para **13-qa-tela:** `data-testid` obrigatório em botoes, inputs, cards de lista, badges de status.

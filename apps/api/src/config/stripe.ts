@@ -5,7 +5,7 @@ let stripeInstance: Stripe | null = null;
 
 export const getStripe = (): Stripe => {
   if (!env.STRIPE_SECRET_KEY) {
-    throw new Error('STRIPE_SECRET_KEY nao configurado');
+    throw new Error('STRIPE_SECRET_KEY não configurado');
   }
   if (!stripeInstance) {
     stripeInstance = new Stripe(env.STRIPE_SECRET_KEY, {

@@ -23,5 +23,5 @@ export const errorHandler = (
 };
 
 export const notFoundHandler = (_req: Request, res: Response) => {
-  res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Rota nao encontrada' } });
+  res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Rota não encontrada' } });
 };

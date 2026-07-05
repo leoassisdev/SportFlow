@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: `%s | ${APP_NAME}`,
   },
   description:
-    'SportFlow: plataforma SaaS de gestao de campeonatos esportivos com placar ao vivo, financeiro e relatorios.',
+    'SportFlow: plataforma SaaS de gestão de campeonatos esportivos com placar ao vivo, financeiro e relatórios.',
   metadataBase: new URL('https://sportflow.com.br'),
   openGraph: {
     type: 'website',

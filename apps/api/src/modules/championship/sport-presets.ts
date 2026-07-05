@@ -1,8 +1,11 @@
 /**
- * Sport presets — configuracao padrao de cada esporte do MVP.
- * MVP: Futebol, Volei, Tenis, Skate.
- * Adicionar novo esporte AQUI nao exige alteracao de schema — `rulesConfig` no
- * modelo `Championship` e JSONB livre.
+ * Sport presets — configuração padrão de cada esporte do MVP.
+ * MVP: Futebol, Vôlei, Tênis, Skate.
+ * Adicionar novo esporte AQUI não exige alteração de schema — `rulesConfig` no
+ * modelo `Championship` é JSONB livre.
+ *
+ * Nota: as chaves ficam SEM acento (identifiers válidos e URL-safe). Só o
+ * `label` é exibido pro usuário e usa acento.
  */
 
 export type SportKey = 'futebol' | 'volei' | 'tenis' | 'skate';
@@ -33,7 +36,7 @@ export const SPORT_PRESETS: Record<SportKey, SportPreset> = {
   },
   volei: {
     key: 'volei',
-    label: 'Volei',
+    label: 'Vôlei',
     scoreType: 'sets_and_points',
     hasTimer: false,
     maxParticipants: 16,
@@ -45,7 +48,7 @@ export const SPORT_PRESETS: Record<SportKey, SportPreset> = {
   },
   tenis: {
     key: 'tenis',
-    label: 'Tenis',
+    label: 'Tênis',
     scoreType: 'sets_and_points',
     hasTimer: false,
     maxParticipants: 64,

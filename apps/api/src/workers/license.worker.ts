@@ -7,7 +7,7 @@ const LICENSE_QUEUE = 'license-check';
 
 const queue = new Queue(LICENSE_QUEUE, { connection: bullConnection });
 
-// Repeat job: verifica licencas vencidas de hora em hora.
+// Repeat job: verifica licenças vencidas de hora em hora.
 void queue.add(
   'expire-check',
   {},
@@ -22,7 +22,7 @@ export const createLicenseWorker = () =>
     LICENSE_QUEUE,
     async () => {
       const { expired } = await licenseService.expireOverdue();
-      if (expired > 0) logger.info({ expired }, 'license worker: licencas expiradas');
+      if (expired > 0) logger.info({ expired }, 'license worker: licenças expiradas');
     },
     { connection: bullConnection },
   );

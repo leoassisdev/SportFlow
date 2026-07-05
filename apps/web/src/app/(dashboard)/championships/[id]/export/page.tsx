@@ -14,24 +14,24 @@ const STATUS_ICON: Record<string, JSX.Element> = {
   failed: <XCircle className="h-4 w-4 text-danger" />,
 };
 
-export const metadata = { title: 'Exportacoes' };
+export const metadata = { title: 'Exportações' };
 
 export default function ExportPage({ params: _params }: { params: { id: string } }) {
   return (
     <div className="mx-auto max-w-5xl space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-widest text-ink-100">Exportacoes</p>
-        <h1 className="font-display text-3xl font-black">Gere relatorios do campeonato</h1>
+        <p className="text-xs uppercase tracking-widest text-ink-100">Exportações</p>
+        <h1 className="font-display text-3xl font-black">Gere relatórios do campeonato</h1>
       </div>
 
       <div className="card">
-        <h2 className="font-display text-xl font-bold">Nova exportacao</h2>
+        <h2 className="font-display text-xl font-bold">Nova exportação</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <button className="flex items-center gap-3 rounded-2xl border border-ink-800 bg-ink-800/40 p-4 text-left hover:border-brand-500">
             <FileText className="h-8 w-8 text-brand-400" />
             <div>
               <p className="font-semibold">PDF</p>
-              <p className="text-xs text-ink-100">Relatorio visual pronto para imprimir</p>
+              <p className="text-xs text-ink-100">Relatório visual pronto para imprimir</p>
             </div>
           </button>
           <button className="flex items-center gap-3 rounded-2xl border border-ink-800 bg-ink-800/40 p-4 text-left hover:border-brand-500">
@@ -53,7 +53,7 @@ export default function ExportPage({ params: _params }: { params: { id: string }
             ))}
           </div>
         </div>
-        <button className="btn-accent mt-4">Gerar exportacao</button>
+        <button className="btn-accent mt-4">Gerar exportação</button>
       </div>
 
       <div className="card">

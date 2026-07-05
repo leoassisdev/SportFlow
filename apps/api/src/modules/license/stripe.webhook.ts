@@ -10,7 +10,7 @@ const router = Router();
 // Stripe exige raw body para verificar assinatura HMAC.
 router.post('/stripe', express.raw({ type: 'application/json' }), async (req: Request, res: Response) => {
   if (!stripeAvailable() || !env.STRIPE_WEBHOOK_SECRET) {
-    return res.status(503).json({ error: { code: 'STRIPE_DISABLED', message: 'Stripe nao configurado' } });
+    return res.status(503).json({ error: { code: 'STRIPE_DISABLED', message: 'Stripe não configurado' } });
   }
 
   const sig = req.headers['stripe-signature'];
@@ -22,8 +22,8 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req: Re
   try {
     event = getStripe().webhooks.constructEvent(req.body as Buffer, sig, env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    logger.warn({ err }, 'assinatura Stripe invalida');
-    return res.status(400).json({ error: { code: 'BAD_SIGNATURE', message: 'Assinatura invalida' } });
+    logger.warn({ err }, 'assinatura Stripe inválida');
+    return res.status(400).json({ error: { code: 'BAD_SIGNATURE', message: 'Assinatura inválida' } });
   }
 
   if (event.type === 'checkout.session.completed') {
@@ -35,9 +35,9 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req: Re
     }
     try {
       await licenseService.activate(licenseId, session.payment_intent as string);
-      logger.info({ licenseId }, 'licenca ativada via webhook');
+      logger.info({ licenseId }, 'licença ativada via webhook');
     } catch (err) {
-      logger.warn({ err, licenseId }, 'ativacao falhou (talvez ja ativa)');
+      logger.warn({ err, licenseId }, 'ativação falhou (talvez já ativa)');
     }
   }
 

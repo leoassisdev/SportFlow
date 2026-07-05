@@ -2,9 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const TXS = [
-  { id: '1', type: 'income', category: 'Inscricao', amount: 400, description: 'Time A - Grupo A', date: '01/07', sponsor: null },
+  { id: '1', type: 'income', category: 'Inscrição', amount: 400, description: 'Time A - Grupo A', date: '01/07', sponsor: null },
   { id: '2', type: 'income', category: 'Patrocinio', amount: 1500, description: 'Padaria Central', date: '02/07', sponsor: 'Padaria Central' },
-  { id: '3', type: 'expense', category: 'Arbitragem', amount: -280, description: 'Arbitro Silva', date: '03/07', sponsor: null },
+  { id: '3', type: 'expense', category: 'Arbitragem', amount: -280, description: 'Árbitro Silva', date: '03/07', sponsor: null },
   { id: '4', type: 'expense', category: 'Aluguel', amount: -600, description: 'Quadra municipal', date: '04/07', sponsor: null },
 ] as const;
 
@@ -31,7 +31,7 @@ export default function FinancialPage({ params: _params }: { params: { id: strin
             <p className="text-xs uppercase tracking-widest text-ink-100">Financeiro do campeonato</p>
             <h1 className="font-display text-3xl font-black">Interbairros 2026</h1>
           </div>
-          <button className="btn-accent">+ Nova transacao</button>
+          <button className="btn-accent">+ Nova transação</button>
         </div>
       </div>
 
@@ -48,9 +48,9 @@ export default function FinancialPage({ params: _params }: { params: { id: strin
             <tr>
               <th className="px-4 py-3">Data</th>
               <th className="px-4 py-3">Categoria</th>
-              <th className="px-4 py-3">Descricao</th>
+              <th className="px-4 py-3">Descrição</th>
               <th className="px-4 py-3 text-right">Valor</th>
-              <th className="px-4 py-3 text-right">Acoes</th>
+              <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-800 bg-ink-950">

@@ -1,6 +1,6 @@
 # Arquitetura Backend — SportFlow
 
-**Agente responsavel:** 03-arquiteto-it-valley-backend
+**Agente responsável:** 03-arquiteto-it-valley-backend
 **Stack:** Node.js 20 + TypeScript + Express + Prisma + PostgreSQL 15 (RLS) + Redis 7 + Socket.io + Bull + Stripe SDK + Puppeteer
 
 ---
@@ -19,7 +19,7 @@ apps/api/
 │   ├── middlewares/
 │   │   ├── auth.middleware.ts     # Valida JWT, popula req.user
 │   │   ├── tenant.middleware.ts   # SET LOCAL app.current_tenant_id
-│   │   ├── license.middleware.ts  # Bloqueia se licenca expirada
+│   │   ├── license.middleware.ts  # Bloqueia se licença expirada
 │   │   ├── rateLimit.middleware.ts
 │   │   ├── audit.middleware.ts    # Fire-and-forget
 │   │   └── superadmin.middleware.ts
@@ -44,7 +44,7 @@ apps/api/
 │   │   ├── export/
 │   │   ├── license/
 │   │   ├── superadmin/
-│   │   └── live/                  # rotas publicas /live
+│   │   └── live/                  # rotas públicas /live
 │   │
 │   ├── workers/
 │   │   ├── export.worker.ts
@@ -87,11 +87,11 @@ apps/api/
 
 ## 2. Camadas (por modulo)
 
-**Controller → Service → Repository** (regra rigida).
+**Controller → Service → Repository** (regra rígida).
 
 - **Controller** e fino: valida input (Zod), chama Service, formata resposta HTTP. Nenhuma logica de negocio.
-- **Service** contem regras de negocio, orquestra repositories, publica eventos, dispara Bull jobs.
-- **Repository** e a UNICA camada que fala com Prisma. Sempre inclui `tenantId` na query (RLS ajuda mas nao dispensa).
+- **Service** contém regras de negocio, orquestra repositories, pública eventos, dispara Bull jobs.
+- **Repository** e a ÚNICA camada que fala com Prisma. Sempre inclui `tenantId` na query (RLS ajuda mas não dispensa).
 - **Schema** exporta Zod schemas + tipos TS.
 - **Factory** cria objetos complexos (tokens JWT, live tokens, sport preset resolvido).
 - **Mapper** converte entity Prisma → DTO da API.
@@ -111,18 +111,18 @@ app.use(cookieParser())
 app.use(express.json({ limit: '1mb' }))
 app.use(pinoHttp({ logger }))
 
-// PUBLICO (sem auth)
+// PÚBLICO (sem auth)
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/live', liveRoutes)
 app.use('/api/v1/webhooks', webhookRoutes) // Stripe
 app.get('/api/health', healthController)
 app.get('/metrics', prometheusController)
 
-// PROTEGIDO — ordem NAO negociavel
+// PROTEGIDO — ordem NÃO negociavel
 app.use(authMiddleware)         // 1. JWT → req.user
 app.use(tenantMiddleware)       // 2. SET LOCAL app.current_tenant_id
 app.use(rateLimitMiddleware)    // 3. Rate limit por IP+tenant
-app.use(licenseMiddleware)      // 4. Licenca ativa?
+app.use(licenseMiddleware)      // 4. Licença ativa?
 app.use(auditMiddleware)        // 5. Log de audit fire-and-forget
 
 app.use('/api/v1/championships', championshipRoutes)
@@ -140,11 +140,11 @@ app.use(errorHandler)
 
 ---
 
-## 4. Autenticacao (fluxo)
+## 4. Autenticação (fluxo)
 
 - **Register:** cria User + Tenant em transaction. Tenant status `preview`. Retorna cookies.
 - **Login:** compara bcrypt → gera access(15m) + refresh(7d). Cookies HttpOnly.
-- **Refresh:** cookie refresh presente → verifica → gera novo access. Se refresh invalido → 401.
+- **Refresh:** cookie refresh presente → verifica → gera novo access. Se refresh inválido → 401.
 - **Logout:** limpa cookies + adiciona refresh token a blacklist Redis (TTL = expiracao original).
 
 JWT payload:
@@ -160,7 +160,7 @@ JWT payload:
 
 ---
 
-## 5. Multi-tenancy — implementacao pratica
+## 5. Multi-tenancy — implementação prática
 
 **Tenant middleware:**
 ```typescript
@@ -183,24 +183,24 @@ export const tenantMiddleware = async (req, res, next) => {
 
 - Adapter Redis para escalar horizontal
 - Auth de room admin: middleware Socket.io le cookie do handshake, verifica JWT
-- Room publico `match:public:{liveToken}` nao exige auth mas e read-only (server descarta emits do client)
+- Room público `match:public:{liveToken}` não exige auth mas e read-only (server descarta emits do client)
 - Eventos server → client: `score:updated`, `timer:started|paused|reset`, `export:ready`, `match:finished`
 - Eventos client → server (admin only): `score:update`, `timer:start|pause|reset`
 
 Fluxo de score update:
 ```
 Admin emite score:update
-  → server verifica auth + permissao no match
+  → server verifica auth + permissão no match
   → chama ScoreboardService.recordScore(...)
   → persiste ScoreEntry
   → recomputa placar
-  → publica em Redis (adapter)
+  → pública em Redis (adapter)
   → broadcast para match:admin:{id} + match:public:{token}
 ```
 
 ---
 
-## 7. Bull queue — configuracao
+## 7. Bull queue — configuração
 
 - `Queue` para producers (dentro do API)
 - `Worker` como processo separado (mesmo repo, entry point `workers/index.ts`)
@@ -212,7 +212,7 @@ Admin emite score:update
 
 ## 8. Stripe integration
 
-- **Nunca** usar SDK no frontend para operacoes sensiveis.
+- **Nunca** usar SDK no frontend para operações sensiveis.
 - Backend cria `Session` → retorna URL.
 - Webhook em `/api/v1/webhooks/stripe`:
   1. Le `stripe-signature` header
@@ -220,7 +220,7 @@ Admin emite score:update
   3. Se `checkout.session.completed`:
      - Extrai `licenseId` de `session.metadata`
      - Chama `LicenseService.activate(licenseId, session.payment_intent)`
-  4. Retorna 200 rapido; toda logica pesada e assincrona
+  4. Retorna 200 rápido; toda logica pesada e assincrona
 
 ---
 
@@ -236,7 +236,7 @@ Dockerfile do worker precisa incluir dependencias Chromium (documentar).
 
 ---
 
-## 10. Padrao de erro
+## 10. Padrão de erro
 
 ```typescript
 // shared/errors.ts
@@ -296,14 +296,14 @@ const envSchema = z.object({
 export const env = envSchema.parse(process.env)
 ```
 
-App falha rapido no boot se config errada.
+App falha rápido no boot se config errada.
 
 ---
 
 ## 12. Testabilidade
 
-- Servicos aceitam dependencias por parametro (nao usar singletons in-line) → facil mockar
-- Repositories fakes com Map em memoria para testes unitarios
+- Serviços aceitam dependencias por parametro (não usar singletons in-line) → fácil mockar
+- Repositories fakes com Map em memória para testes unitarios
 - Integration tests: banco Postgres real + RLS ativo + transactions rollback per test
 
 ---
@@ -312,5 +312,5 @@ App falha rapido no boot se config errada.
 
 - Para **04-frontend:** contratos de API (documentar via `packages/shared-types` — DTO por endpoint), eventos Socket.io e cookies esperados
 - Para **07-sql-mongodb:** schema Prisma da secao 15 do docs/01-prd
-- Para **10-dev-backend:** este documento + skeleton de pastas ja bootstrapado no monorepo
-- Para **02-c:** confirmar que RLS + rate limit + Zod estao em todo endpoint
+- Para **10-dev-backend:** este documento + skeleton de pastas já bootstrapado no monorepo
+- Para **02-c:** confirmar que RLS + rate limit + Zod estão em todo endpoint

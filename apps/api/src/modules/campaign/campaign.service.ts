@@ -50,7 +50,7 @@ export const campaignService = {
     const found = await prisma.campaign.findUnique({ where: { id } });
     if (!found) throw new NotFoundError('Campanha');
     if (found.status !== 'draft' && found.status !== 'scheduled') {
-      throw new ConflictError('Campanha ja em envio ou enviada');
+      throw new ConflictError('Campanha já em envio ou enviada');
     }
     return prisma.campaign.update({
       where: { id },
@@ -69,7 +69,7 @@ export const campaignService = {
     const campaign = await prisma.campaign.findUnique({ where: { id } });
     if (!campaign) throw new NotFoundError('Campanha');
     if (campaign.status === 'sending' || campaign.status === 'sent') {
-      throw new ConflictError('Campanha ja em envio ou enviada');
+      throw new ConflictError('Campanha já em envio ou enviada');
     }
     await prisma.campaign.update({ where: { id }, data: { status: 'sending' } });
     const payload: CampaignJobPayload = { campaignId: id };
@@ -85,13 +85,13 @@ export const campaignService = {
     const found = await prisma.campaign.findUnique({ where: { id } });
     if (!found) throw new NotFoundError('Campanha');
     if (found.status === 'sending' || found.status === 'sent') {
-      throw new ConflictError('Nao pode excluir campanha ja enviada (mantida para auditoria)');
+      throw new ConflictError('Não pode excluir campanha já enviada (mantida para auditoria)');
     }
     await prisma.campaign.delete({ where: { id } });
   },
 
   /**
-   * Resolve o publico com base na audiencia da campanha. Filtra por opt-in
+   * Resolve o público com base na audiência da campanha. Filtra por opt-in
    * do canal e contato presente.
    */
   async resolveAudience(audience: CampaignAudience, channel: CampaignChannel) {

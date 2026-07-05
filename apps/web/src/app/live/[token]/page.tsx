@@ -19,7 +19,7 @@ async function fetchLive(token: string): Promise<LiveMatch | null> {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await fetchLive(params.token);
-  if (!data) return { title: 'Placar nao encontrado' };
+  if (!data) return { title: 'Placar não encontrado' };
   const { home, away } = data.match.homeParticipant && data.match.awayParticipant
     ? { home: data.match.homeParticipant.name, away: data.match.awayParticipant.name }
     : { home: 'Casa', away: 'Fora' };
@@ -41,9 +41,9 @@ export default async function LivePage({ params }: Props) {
     return (
       <main className="grid min-h-screen place-items-center bg-ink-950 px-6 text-center">
         <div className="card max-w-md">
-          <h1 className="font-display text-3xl font-black">Placar nao encontrado</h1>
+          <h1 className="font-display text-3xl font-black">Placar não encontrado</h1>
           <p className="mt-2 text-sm text-ink-100">
-            O link pode ter expirado ou o jogo ainda nao comecou.
+            O link pode ter expirado ou o jogo ainda não comecou.
           </p>
         </div>
       </main>

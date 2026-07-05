@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { isValidSport } from './sport-presets.js';
 
-const sportKey = z.string().refine(isValidSport, 'Esporte invalido');
+const sportKey = z.string().refine(isValidSport, 'Esporte inválido');
 
 export const createChampionshipSchema = z.object({
   name: z.string().trim().min(2).max(120),

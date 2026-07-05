@@ -4,22 +4,22 @@ const MOCK = [
   { id: 'l3', tenant: 'Copa Amadora Centro', days: 30, price: 500, status: 'expired', expires: '09/06' },
 ];
 
-export const metadata = { title: 'SuperAdmin — Licencas' };
+export const metadata = { title: 'SuperAdmin — Licenças' };
 
 export default function LicensesPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="font-display text-3xl font-black">Licencas</h1>
-        <button className="btn-accent">+ Nova licenca</button>
+        <h1 className="font-display text-3xl font-black">Licenças</h1>
+        <button className="btn-accent">+ Nova licença</button>
       </div>
 
       <div className="card space-y-3">
-        <h2 className="font-display text-lg font-bold">Emitir licenca (Stripe Checkout)</h2>
+        <h2 className="font-display text-lg font-bold">Emitir licença (Stripe Checkout)</h2>
         <div className="grid gap-3 md:grid-cols-4">
           <input className="input-base md:col-span-2" placeholder="Tenant (autocomplete)" />
           <input className="input-base" placeholder="Dias" type="number" defaultValue={30} />
-          <input className="input-base" placeholder="Preco BRL" type="number" defaultValue={500} />
+          <input className="input-base" placeholder="Preço BRL" type="number" defaultValue={500} />
         </div>
         <button className="btn-primary">Gerar link Stripe + enviar</button>
       </div>
@@ -30,7 +30,7 @@ export default function LicensesPage() {
             <tr>
               <th className="px-4 py-3">Tenant</th>
               <th className="px-4 py-3">Dias</th>
-              <th className="px-4 py-3">Preco</th>
+              <th className="px-4 py-3">Preço</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Expira</th>
             </tr>

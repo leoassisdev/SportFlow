@@ -1,8 +1,8 @@
-# SportFlow — Plataforma SaaS de Gestao Esportiva
+# SportFlow — Plataforma SaaS de Gestão Esportiva
 
 **Desenvolvido por FlowCore**
 
-Plataforma multi-tenant para gestao de campeonatos, placares em tempo real e financas esportivas. Arquitetura segura, robusta e escalavel construida com a esteira de agentes FlowCore.
+Plataforma multi-tenant para gestão de campeonatos, placares em tempo real e financas esportivas. Arquitetura segura, robusta e escalavel construida com a esteira de agentes FlowCore.
 
 ---
 
@@ -12,11 +12,11 @@ O SportFlow permite que **organizadores de eventos esportivos** (Contratantes) c
 
 ### Tres Perfis de Acesso
 
-| Perfil | Acesso | Autenticacao |
+| Perfil | Acesso | Autenticação |
 |--------|--------|-------------|
-| **Admin (SuperAdmin)** | Gestao completa do sistema, tenants, licencas, metricas | JWT + 2FA + IP whitelist |
-| **Contratante (Tenant)** | Campeonatos, placar, financeiro, exportacoes | JWT + Licenca ativa |
-| **Espectador (Publico)** | Placar ao vivo via link publico | Nenhuma (SSR, read-only) |
+| **Admin (SuperAdmin)** | Gestão completa do sistema, tenants, licenças, métricas | JWT + 2FA + IP whitelist |
+| **Contratante (Tenant)** | Campeonatos, placar, financeiro, exportações | JWT + Licença ativa |
+| **Espectador (Público)** | Placar ao vivo via link público | Nenhuma (SSR, read-only) |
 
 ---
 
@@ -38,21 +38,21 @@ O SportFlow permite que **organizadores de eventos esportivos** (Contratantes) c
 | **CI/CD** | GitHub Actions |
 | **Deploy** | Azure App Service (`plan-tcc` / `rg-webapps`) via GitHub Actions |
 | **Observabilidade** | Prometheus + Grafana + Pino + Sentry |
-| **Storage** | Azure Blob Storage (ou S3/R2 conforme decisao final) |
+| **Storage** | Azure Blob Storage (ou S3/R2 conforme decisão final) |
 | **Testes** | Vitest + Supertest + Playwright |
 
 ---
 
 ## Esportes Suportados (MVP)
 
-| Esporte | Motor de Placar | Timer | Configuracao |
+| Esporte | Motor de Placar | Timer | Configuração |
 |---------|-----------------|-------|--------------|
 | **Futebol** | Gols | Sim | 2 tempos x 45min, max 32 participantes |
-| **Volei** | Sets + pontos | Nao | 3 sets, 25 pts/set, max 16 participantes |
-| **Tenis** | Sets + games (15/30/40) | Nao | Best-of-3 sets, 6 games/set, tie-break em 6-6, max 64 |
-| **Skate** | Notas de juizes | Nao | 3 rounds, nota max 100, max 64 participantes |
+| **Vôlei** | Sets + pontos | Não | 3 sets, 25 pts/set, max 16 participantes |
+| **Tênis** | Sets + games (15/30/40) | Não | Best-of-3 sets, 6 games/set, tie-break em 6-6, max 64 |
+| **Skate** | Notas de juizes | Não | 3 rounds, nota max 100, max 64 participantes |
 
-Novos esportes sao adicionados via `apps/api/src/modules/championship/sport-presets.ts` sem alterar schema — o campo `rulesConfig` (JSONB) suporta qualquer configuracao.
+Novos esportes são adicionados via `apps/api/src/modules/championship/sport-presets.ts` sem alterar schema — o campo `rulesConfig` (JSONB) suporta qualquer configuração.
 
 ---
 
@@ -72,7 +72,7 @@ sportflow/
 │   │   │   │   ├── scoreboard/       # placar real-time (Socket.io)
 │   │   │   │   ├── financial/        # receitas, despesas, patrocinadores
 │   │   │   │   ├── export/           # PDF/CSV async (Bull queue)
-│   │   │   │   └── license/          # Stripe, ativacao, expiracao
+│   │   │   │   └── license/          # Stripe, ativação, expiracao
 │   │   │   ├── workers/             # export, email, license checker
 │   │   │   ├── events/              # publisher, contracts, consumers
 │   │   │   ├── shared/              # errors, logger (Pino), pagination
@@ -108,7 +108,7 @@ sportflow/
 │       │   │   │   ├── licenses/
 │       │   │   │   ├── leads/
 │       │   │   │   └── metrics/
-│       │   │   └── live/[token]/     # placar publico (SSR, sem auth)
+│       │   │   └── live/[token]/     # placar público (SSR, sem auth)
 │       │   ├── components/
 │       │   │   ├── ui/               # shadcn/ui
 │       │   │   ├── scoreboard/       # LiveScoreboard, GameTimer, ScoreUpdater
@@ -118,7 +118,7 @@ sportflow/
 │       │   │   ├── useSocket.ts
 │       │   │   ├── useLiveScore.ts
 │       │   │   └── useAuth.ts
-│       │   ├── services/             # camada de servicos
+│       │   ├── services/             # camada de serviços
 │       │   ├── dto/                  # DTOs TypeScript
 │       │   ├── lib/
 │       │   │   ├── api.ts            # Axios + interceptors
@@ -155,7 +155,7 @@ sportflow/
 │       ├── deploy-frontend.yml
 │       └── deploy-full.yml
 │
-├── .env.example                      # template de variaveis
+├── .env.example                      # template de variáveis
 ├── turbo.json                        # config Turborepo
 ├── package.json                      # root do monorepo
 ├── CLAUDE.md                         # guia completo de construcao
@@ -174,11 +174,11 @@ sportflow/
 
 2. Sistema cria tenant em modo "preview"
    - Max 3 participantes
-   - Sem exportacao
+   - Sem exportação
    - Sem financeiro
    - Marca d'agua no placar
 
-3. Admin cria licenca no painel superadmin
+3. Admin cria licença no painel superadmin
    POST /superadmin/licenses { tenant_id, days: 3, price: 500 }
 
 4. Sistema gera link Stripe Checkout → envia por email
@@ -190,10 +190,10 @@ sportflow/
    license.status = 'active'
    expires_at = now + 3 dias
 
-7. Apos expiracao: License Worker bloqueia (403)
+7. Após expiracao: License Worker bloqueia (403)
    - Dados preservados por 30 dias (LGPD)
 
-8. Apos 30 dias: exclusao automatica
+8. Após 30 dias: exclusão automática
 ```
 
 ### Fluxo 2: Placar em Tempo Real
@@ -204,24 +204,24 @@ LADO ADMIN (Contratante):
 2. Clica "+1 ponto" → PATCH /api/v1/matches/:id/score
 3. Backend:
    - Salva em score_entries (PostgreSQL)
-   - Publica via Redis Pub/Sub
+   - Pública via Redis Pub/Sub
    - Registra em audit_logs
 4. Controla timer: socket.emit('timer:start' | 'timer:pause')
 
-LADO PUBLICO (Espectador):
+LADO PÚBLICO (Espectador):
 1. Acessa /live/{live_token} (sem auth, SSR)
 2. Next.js renderiza placar no servidor (sem flicker)
 3. Conecta ao Socket.io room match:public:{token} (read-only)
-4. Recebe atualizacoes < 100ms:
+4. Recebe atualizações < 100ms:
    - score:updated
    - timer:started / paused / reset
-5. NAO acessa financeiro, outros jogos ou painel admin
+5. NÃO acessa financeiro, outros jogos ou painel admin
 ```
 
-### Fluxo 3: Exportacao (PDF/CSV) Assincrona
+### Fluxo 3: Exportação (PDF/CSV) Assincrona
 
 ```
-1. Contratante solicita exportacao
+1. Contratante solicita exportação
    POST /api/v1/championships/:id/export
    { format: 'pdf', modules: ['results', 'financial'] }
    → Resposta imediata com job_id
@@ -234,7 +234,7 @@ LADO PUBLICO (Espectador):
    - CSV via fast-csv
    - Upload para S3/R2
 
-4. Notificacao ao usuario
+4. Notificação ao usuario
    - Socket.io: export:ready { download_url }
    - Email com link (expira em 24h)
 ```
@@ -273,7 +273,7 @@ audit_logs       → id, tenantId, userId, action, resource, payload (JSONB),
 Toda tabela possui `tenantId`. Row-Level Security no PostgreSQL garante isolamento:
 
 ```sql
--- Politica RLS: tenant so ve seus proprios dados
+-- Política RLS: tenant só ve seus próprios dados
 ALTER TABLE championships ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY tenant_isolation ON championships
@@ -313,13 +313,13 @@ DELETE /api/v1/championships/:id       # Soft delete
 GET    /api/v1/matches/:id             # Detalhe do jogo
 PATCH  /api/v1/matches/:id/score       # Atualizar placar → Redis pub/sub
 PATCH  /api/v1/matches/:id/timer       # Iniciar/pausar timer
-GET    /api/v1/live/:token             # Dados publicos do placar (SSR)
+GET    /api/v1/live/:token             # Dados públicos do placar (SSR)
 ```
 
 ### Financial
 ```
 GET    /api/v1/championships/:id/financial     # Resumo financeiro
-POST   /api/v1/financial/transactions          # Criar transacao
+POST   /api/v1/financial/transactions          # Criar transação
 PATCH  /api/v1/financial/transactions/:id      # Atualizar
 DELETE /api/v1/financial/transactions/:id      # Remover
 ```
@@ -333,10 +333,10 @@ GET    /api/v1/export-jobs/:id                 # Status do job
 ### SuperAdmin (apenas Admin)
 ```
 GET    /superadmin/tenants              # Listar todos os tenants
-POST   /superadmin/licenses             # Criar licenca
+POST   /superadmin/licenses             # Criar licença
 PATCH  /superadmin/licenses/:id         # Ativar/desativar
 GET    /superadmin/leads                # Ver leads
-GET    /superadmin/metrics              # Metricas do sistema
+GET    /superadmin/metrics              # Métricas do sistema
 ```
 
 ### Webhooks
@@ -348,37 +348,37 @@ POST   /api/v1/webhooks/stripe          # Stripe payment confirmation
 ```
 Rooms:
   match:admin:{matchId}     # Admin (autenticado)
-  match:public:{liveToken}  # Publico (read-only)
+  match:public:{liveToken}  # Público (read-only)
 
 Events emitidos:
   score:updated             # Placar atualizado
   timer:started             # Timer iniciado
   timer:paused              # Timer pausado
   timer:reset               # Timer resetado
-  export:ready              # Exportacao concluida
+  export:ready              # Exportação concluida
 ```
 
 ---
 
 ## Seguranca
 
-| Pilar | Implementacao |
+| Pilar | Implementação |
 |-------|-------------|
 | **Multi-tenancy** | PostgreSQL RLS + middleware tenant |
-| **Autenticacao** | JWT em HttpOnly cookies (15min access + 7d refresh) |
-| **Autorizacao** | RBAC (Admin, Tenant Owner, Tenant Member, Public) |
-| **Licenciamento** | Middleware valida licenca ativa em toda rota protegida |
+| **Autenticação** | JWT em HttpOnly cookies (15min access + 7d refresh) |
+| **Autorização** | RBAC (Admin, Tenant Owner, Tenant Member, Public) |
+| **Licenciamento** | Middleware valida licença ativa em toda rota protegida |
 | **Rate Limiting** | 100 req/min normal, 10 req/min login |
 | **Passwords** | bcrypt com cost factor 12 |
-| **2FA** | Obrigatorio para painel superadmin |
+| **2FA** | Obrigatório para painel superadmin |
 | **CORS** | Apenas dominio frontend permitido |
 | **CSP** | Helmet.js com Content Security Policy |
 | **SQL Injection** | Prisma ORM (prepared statements) |
-| **XSS** | React (escape automatico) + CSP headers |
-| **Audit** | Toda acao critica logada em audit_logs |
-| **LGPD** | Soft delete com retencao 30 dias + exclusao automatica |
+| **XSS** | React (escape automático) + CSP headers |
+| **Audit** | Toda ação crítica logada em audit_logs |
+| **LGPD** | Soft delete com retencao 30 dias + exclusão automática |
 | **Webhooks** | Verificacao de assinatura Stripe em todo webhook |
-| **Secrets** | Variaveis de ambiente, NUNCA no codigo |
+| **Secrets** | Variáveis de ambiente, NUNCA no codigo |
 
 ---
 
@@ -402,7 +402,7 @@ npm install
 # 3. Subir infra local (PostgreSQL + Redis)
 docker-compose up -d
 
-# 4. Configurar variaveis de ambiente
+# 4. Configurar variáveis de ambiente
 cp .env.example .env.development
 
 # 5. Rodar migrations
@@ -435,9 +435,9 @@ npm run db:reset         # Reset completo (dev only)
 
 # Testes
 npm run test             # Testes unitarios (Vitest)
-npm run test:integration # Testes de integracao (Supertest)
+npm run test:integration # Testes de integração (Supertest)
 npm run test:e2e         # Testes E2E (Playwright)
-npm run test:coverage    # Relatorio de cobertura
+npm run test:coverage    # Relatório de cobertura
 
 # Docker
 docker-compose up -d     # Subir PostgreSQL + Redis
@@ -448,7 +448,7 @@ docker-compose down      # Parar containers
 
 ## Deploy
 
-**Alvo unico:** Azure App Service, sempre via GitHub Actions.
+**Alvo único:** Azure App Service, sempre via GitHub Actions.
 
 - **App Service Plan:** `plan-tcc`
 - **Resource Group:** `rg-webapps`
@@ -460,7 +460,7 @@ docker-compose down      # Parar containers
 
 ### CI/CD (GitHub Actions)
 
-Push para `main` dispara deploy automatico via `azure/webapps-deploy@v3`:
+Push para `main` dispara deploy automático via `azure/webapps-deploy@v3`:
 - `apps/api/**` alterado → deploy backend (`sportflow-api`)
 - `apps/web/**` alterado → deploy frontend (`sportflow-web`)
 - `workflow_dispatch` para deploy manual autorizado
@@ -473,15 +473,15 @@ Publish profile no GitHub Secrets:
 
 ## Ordem de Construcao Recomendada
 
-Para o MVP mais rapido com features funcionais:
+Para o MVP mais rápido com features funcionais:
 
 1. **Auth + Tenant + License** — fundacao, nada funciona sem isso
 2. **Championship Service** — criar campeonatos, categorias esportivas
 3. **Scoreboard com real-time** — feature mais visivel (Socket.io)
 4. **Financial Service** — rastreamento de receitas/despesas
-5. **Export Service** — geracao de PDF/CSV (async com Bull)
-6. **Placar publico** — link ao vivo para espectadores (SSR)
-7. **Integracao Stripe** — habilitar pagamentos
+5. **Export Service** — geração de PDF/CSV (async com Bull)
+6. **Placar público** — link ao vivo para espectadores (SSR)
+7. **Integração Stripe** — habilitar pagamentos
 8. **Observabilidade** — monitoramento, alertas, logging
 9. **Hardening** — patches de seguranca, tuning de performance
 
@@ -490,33 +490,33 @@ Para o MVP mais rapido com features funcionais:
 ## Esteira de Agentes FlowCore
 
 Fonte da verdade: `~/dev/AGENTES_ARQUITETURA/ARQUITETO-SKILLS/`
-Padrao obrigatorio de entrega: `00-padroes/ENTREGA_PREMIUM_FLOWCORE.md`
+Padrão obrigatório de entrega: `00-padrões/ENTREGA_PREMIUM_FLOWCORE.md`
 
 ```
 DESCOBERTA        01-prd-analyst → 02-analista-de-tela
 ARQUITETURA       02-b (infra) + 02-c (SEGURANCA) + 03 + 04 + 05  [paralelo]
-VALIDACAO         06-dev-mockado  [GATE cliente]
+VALIDAÇÃO         06-dev-mockado  [GATE cliente]
 DADOS+PLANO       07-arquiteto-sql-plus-mongodb + 08-p-o-product-owner
 DESENVOLVIMENTO   09-dev-frontend + 10-dev-backend + 15-guardiao (recorrente)
-QA (sequencial)   11-qa-unitario → 12-qa-integracao → 13-qa-tela → 14-playwright-e2e
-EVOLUCAO          16-arquiteto-eventos  (so com sistema 100% aprovado)
+QA (sequencial)   11-qa-unitario → 12-qa-integração → 13-qa-tela → 14-playwright-e2e
+EVOLUÇÃO          16-arquiteto-eventos  (só com sistema 100% aprovado)
 DEPLOY            17-deploy-cicd  (Azure App Service via GitHub Actions)
-MOBILE            18/19  — NAO se aplica (SportFlow e web-only)
+MOBILE            18/19  — NÃO se aplica (SportFlow e web-only)
 OPCIONAIS         opc-a-ui-ux, opc-b-mensageria, opc-c-dados-bi
 ```
 
 Regras herdadas:
 - Deploy SEMPRE via GitHub Actions (NUNCA zip deploy)
 - Nenhum agente versiona segredo, token, `.env`, credencial ou certificado
-- Handoff registra entrada, saida, decisoes, pendencias e proximo agente
-- Seguranca e continua (02-c em arquitetura + 15 em dev/QA), nao uma fase final
+- Handoff registra entrada, saida, decisões, pendencias e próximo agente
+- Seguranca e continua (02-c em arquitetura + 15 em dev/QA), não uma fase final
 
 ---
 
-## Licenca
+## Licença
 
 Proprietario — FlowCore. Todos os direitos reservados.
 
 ---
 
-**FlowCore** — Engenharia de Software com Inteligencia Artificial
+**FlowCore** — Engenharia de Software com Inteligência Artificial

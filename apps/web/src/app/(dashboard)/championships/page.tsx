@@ -50,8 +50,8 @@ export default function ChampionshipsPage() {
         <select className="input-base" value={sport} onChange={(e) => setSport(e.target.value)}>
           <option value="">Todos os esportes</option>
           <option value="futebol">Futebol</option>
-          <option value="volei">Volei</option>
-          <option value="tenis">Tenis</option>
+          <option value="volei">Vôlei</option>
+          <option value="tenis">Tênis</option>
           <option value="skate">Skate</option>
         </select>
         <select className="input-base" value={status} onChange={(e) => setStatus(e.target.value)}>
@@ -78,7 +78,7 @@ export default function ChampionshipsPage() {
                 <th className="px-4 py-3">Esporte</th>
                 <th className="px-4 py-3">Participantes</th>
                 <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Acoes</th>
+                <th className="px-4 py-3 text-right">Ações</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-ink-800 bg-ink-950">
@@ -147,7 +147,7 @@ function ErrorState() {
   return (
     <div className="grid place-items-center p-12 text-center">
       <p className="text-4xl">⚠️</p>
-      <h3 className="mt-3 font-display text-xl font-bold">Nao conseguimos carregar</h3>
+      <h3 className="mt-3 font-display text-xl font-bold">Não conseguimos carregar</h3>
       <p className="mt-1 text-sm text-ink-100">
         Verifique se voce esta logado. Se o problema persistir, tente novamente.
       </p>

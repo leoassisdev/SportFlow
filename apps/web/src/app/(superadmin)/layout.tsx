@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { LayoutDashboard, Users, Shield, FileWarning, Building, LogOut, Megaphone } from 'lucide-react';
 
 const NAV = [
-  { href: '/superadmin', label: 'Metricas', icon: LayoutDashboard },
+  { href: '/superadmin', label: 'Métricas', icon: LayoutDashboard },
   { href: '/superadmin/tenants', label: 'Tenants', icon: Building },
-  { href: '/superadmin/licenses', label: 'Licencas', icon: Shield },
+  { href: '/superadmin/licenses', label: 'Licenças', icon: Shield },
   { href: '/superadmin/leads', label: 'Leads', icon: Users },
   { href: '/superadmin/campaigns', label: 'Campanhas', icon: Megaphone },
   { href: '/superadmin/audit-logs', label: 'Auditoria', icon: FileWarning },

@@ -34,12 +34,12 @@ export const initSocket = (httpServer: HTTPServer) => {
     io.adapter(createAdapter(pub, sub.duplicate()));
     logger.info('Socket.io + Redis adapter online');
   } catch (err) {
-    logger.warn({ err }, 'Redis adapter indisponivel — Socket.io em modo single-node');
+    logger.warn({ err }, 'Redis adapter indisponível — Socket.io em modo single-node');
   }
 
   // Consumer do canal de eventos de match: rebroadcast via rooms.
   void sub.subscribe(matchChannel).catch((err: Error) => {
-    logger.warn({ err }, 'nao inscrito no canal de match');
+    logger.warn({ err }, 'não inscrito no canal de match');
   });
   sub.on('message', (channel: string, raw: string) => {
     if (channel !== matchChannel) return;
@@ -49,7 +49,7 @@ export const initSocket = (httpServer: HTTPServer) => {
       io.to(`match:public:${evt.liveToken}`).emit(eventName, evt);
       io.to(`match:admin:${evt.matchId}`).emit(eventName, evt);
     } catch (err) {
-      logger.warn({ err, raw }, 'mensagem invalida em canal de match');
+      logger.warn({ err, raw }, 'mensagem inválida em canal de match');
     }
   });
 

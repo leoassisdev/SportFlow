@@ -1,7 +1,7 @@
 const MOCK = [
   { id: 't1', name: 'Liga do Bairro (Demo)', status: 'active', users: 3, createdAt: '01/07', license: '30d ativo' },
   { id: 't2', name: 'Skate Contest ZN', status: 'active', users: 2, createdAt: '18/06', license: '30d ativo' },
-  { id: 't3', name: 'Volei Escolar Sul', status: 'preview', users: 1, createdAt: '02/07', license: '—' },
+  { id: 't3', name: 'Vôlei Escolar Sul', status: 'preview', users: 1, createdAt: '02/07', license: '—' },
   { id: 't4', name: 'Copa Amadora Centro', status: 'expired', users: 4, createdAt: '10/05', license: '30d expirado' },
 ];
 
@@ -30,9 +30,9 @@ export default function TenantsPage() {
               <th className="px-4 py-3">Nome</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Usuarios</th>
-              <th className="px-4 py-3">Licenca</th>
+              <th className="px-4 py-3">Licença</th>
               <th className="px-4 py-3">Criado</th>
-              <th className="px-4 py-3 text-right">Acoes</th>
+              <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-800 bg-ink-950">

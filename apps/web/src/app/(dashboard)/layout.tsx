@@ -6,7 +6,7 @@ const NAV = [
   { href: '/championships', label: 'Campeonatos', icon: Trophy },
   { href: '/dashboard#agenda', label: 'Agenda', icon: CalendarClock },
   { href: '/dashboard#financeiro', label: 'Financeiro', icon: Wallet },
-  { href: '/settings', label: 'Configuracoes', icon: Settings },
+  { href: '/settings', label: 'Configurações', icon: Settings },
   { href: '/settings/privacidade', label: 'Privacidade', icon: Shield },
 ];
 
@@ -41,7 +41,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <span className="badge bg-warning/20 text-warning">preview</span>
           </div>
           <Link href="/settings" className="text-brand-400 hover:text-brand-300">
-            Ativar licenca completa →
+            Ativar licença completa →
           </Link>
         </div>
       </aside>

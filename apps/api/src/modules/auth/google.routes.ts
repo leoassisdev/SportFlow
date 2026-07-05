@@ -35,7 +35,7 @@ const refreshCookie: CookieOptions = {
 router.get('/', (_req: Request, res: Response) => {
   if (!googleAvailable()) {
     return res.status(503).json({
-      error: { code: 'GOOGLE_DISABLED', message: 'Login Google nao configurado' },
+      error: { code: 'GOOGLE_DISABLED', message: 'Login Google não configurado' },
     });
   }
   const { url, state } = googleAuthUrl();
@@ -45,7 +45,7 @@ router.get('/', (_req: Request, res: Response) => {
 
 router.get('/callback', async (req: Request, res: Response) => {
   if (!googleAvailable()) {
-    return res.status(503).send('Login Google nao configurado');
+    return res.status(503).send('Login Google não configurado');
   }
 
   const raw = req.query.code;
@@ -64,8 +64,8 @@ router.get('/callback', async (req: Request, res: Response) => {
   try {
     const profile = await exchangeCode(code);
     const { user, created } = await upsertGoogleUser(profile);
-    // Novo usuario Google: registra aceite da politica de privacidade
-    // (obrigatorio pra completar login). Opt-in de marketing fica em false ate
+    // Novo usuario Google: registra aceite da política de privacidade
+    // (obrigatório pra completar login). Opt-in de marketing fica em false até
     // o usuario marcar no /onboarding.
     if (created) {
       await consentService.record('privacy_policy', true, {

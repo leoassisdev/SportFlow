@@ -1,7 +1,7 @@
 import { Queue, QueueEvents, type ConnectionOptions } from 'bullmq';
 import { redis } from '../../config/redis.js';
 
-// BullMQ empacota versao propria de ioredis. Passamos nosso cliente via cast
+// BullMQ empacota versão própria de ioredis. Passamos nosso cliente via cast
 // (funciona em runtime; TS reclama por causa de instancias de tipo distintas).
 export const bullConnection = redis as unknown as ConnectionOptions;
 

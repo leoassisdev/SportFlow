@@ -10,7 +10,7 @@ export default function PaymentCancelPage() {
         <XCircle className="mx-auto h-16 w-16 text-danger" />
         <h1 className="mt-4 font-display text-3xl font-black">Pagamento cancelado</h1>
         <p className="mt-2 text-sm text-ink-100">
-          Voce continua no modo preview. Quando quiser, so retomar de onde parou.
+          Voce continua no modo preview. Quando quiser, só retomar de onde parou.
         </p>
         <Link href="/settings" className="btn-primary mt-6 inline-flex">
           Ver planos

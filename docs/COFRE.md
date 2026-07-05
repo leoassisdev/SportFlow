@@ -11,7 +11,7 @@ sensiveis ficam em `.cofre/` (gitignored) ou no gerenciador de senhas.
 |---------|--------------|------------------|
 | **Google OAuth Client ID** | `.env` local (dev) + Azure App Service Configuration (prod) | `GOOGLE_CLIENT_ID` |
 | **Google OAuth Client Secret** | `.env` local (dev) + Azure App Service Configuration (prod) | `GOOGLE_CLIENT_SECRET` |
-| **Google OAuth Redirect URI** | `.env` (nao e segredo, mas fica junto) | `GOOGLE_REDIRECT_URI` |
+| **Google OAuth Redirect URI** | `.env` (não e segredo, mas fica junto) | `GOOGLE_REDIRECT_URI` |
 | **Stripe Secret Key (live)** | `.cofre/stripe.md` + Azure App Service Config | `STRIPE_SECRET_KEY` |
 | **Stripe Webhook Secret** | `.cofre/stripe.md` + Azure | `STRIPE_WEBHOOK_SECRET` |
 | **JWT Access Secret** | `.env` local (dev), rotacionado tri em prod (Azure) | `JWT_ACCESS_SECRET` |
@@ -33,7 +33,7 @@ sensiveis ficam em `.cofre/` (gitignored) ou no gerenciador de senhas.
    - App name: SportFlow
    - Support email: leo@ ...
    - Developer contact: leo@ ...
-   - Scopes: `openid`, `email`, `profile` (obrigatorios)
+   - Scopes: `openid`, `email`, `profile` (obrigatórios)
    - Test users: emails que farao login em dev
 5. Application type: Web application
 6. Name: SportFlow (dev) [e crie outro separado pra prod]
@@ -83,7 +83,7 @@ Nunca colocar essas vars num arquivo commitado. Nunca colocar em log.
 ## Checklist antes de commitar
 
 - [ ] `git ls-files | grep -iE '\.cofre|client_secret|GOCSPX|whsec_'` retorna VAZIO
-- [ ] `git ls-files | grep -iE '\.env$'` retorna VAZIO (so `.env.example` OK)
+- [ ] `git ls-files | grep -iE '\.env$'` retorna VAZIO (só `.env.example` OK)
 - [ ] `git ls-files | xargs grep -l "GOCSPX-" 2>/dev/null` retorna VAZIO
 
 ---
@@ -93,15 +93,15 @@ Nunca colocar essas vars num arquivo commitado. Nunca colocar em log.
 1. Google Cloud Console → Credentials → editar OAuth client → "Reset secret"
 2. Atualizar `.env` local + Azure App Service Config
 3. Trocar o secret no `.cofre/google-oauth.md`
-4. `git filter-repo` ou BFG pra remover do historico se necessario
+4. `git filter-repo` ou BFG pra remover do histórico se necessario
 5. Push force (avisar time antes)
 6. Registrar incidente em `docs/incidentes.md`
 
 ---
 
-## Rotacao periodica
+## Rotacao periódica
 
-| Segredo | Periodicidade | Responsavel |
+| Segredo | Periodicidade | Responsável |
 |---------|---------------|-------------|
 | Google Client Secret | 6 meses | SuperAdmin |
 | JWT Access/Refresh | 3 meses | SuperAdmin |

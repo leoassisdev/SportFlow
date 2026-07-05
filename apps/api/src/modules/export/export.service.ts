@@ -10,7 +10,7 @@ const isTenantPreview = async (tenantId: string) => {
 
 export const exportService = {
   async enqueue(tenantId: string, input: CreateExportInput) {
-    if (await isTenantPreview(tenantId)) throw new PreviewLimitedError('Exportacao');
+    if (await isTenantPreview(tenantId)) throw new PreviewLimitedError('Exportação');
     const championship = await prisma.championship.findFirst({
       where: { id: input.championshipId, tenantId, deletedAt: null },
       select: { id: true },

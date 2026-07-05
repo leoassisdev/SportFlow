@@ -54,7 +54,7 @@ export default function CampaignsPage() {
         <p className="text-xs uppercase tracking-widest text-danger">SuperAdmin FlowCore</p>
         <h1 className="font-display text-3xl font-black">Campanhas</h1>
         <p className="text-sm text-ink-100">
-          Envie ofertas e comunicados. So sao entregues para usuarios com opt-in ativo.
+          Envie ofertas e comunicados. Só são entregues para usuarios com opt-in ativo.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ export default function CampaignsPage() {
         <form onSubmit={submit} className="space-y-3">
           <input
             className="input-base"
-            placeholder="Titulo interno (nao vai pro destinatario)"
+            placeholder="Titulo interno (não vai pro destinatario)"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             required
@@ -82,10 +82,10 @@ export default function CampaignsPage() {
               value={form.audience}
               onChange={(e) => setForm({ ...form, audience: e.target.value as typeof form.audience })}
             >
-              <option value="users_active">Owners com licenca ativa</option>
+              <option value="users_active">Owners com licença ativa</option>
               <option value="users_preview">Owners em modo preview</option>
               <option value="users_all">Todos os owners</option>
-              <option value="leads">Leads (nao converteram)</option>
+              <option value="leads">Leads (não converteram)</option>
             </select>
           </div>
           {form.channel === 'email' ? (
@@ -117,7 +117,7 @@ export default function CampaignsPage() {
             <div className="h-4 w-64 rounded bg-ink-800" />
           </div>
         ) : error ? (
-          <div className="card text-sm text-danger">Nao conseguimos carregar as campanhas.</div>
+          <div className="card text-sm text-danger">Não conseguimos carregar as campanhas.</div>
         ) : (data ?? []).length === 0 ? (
           <div className="card text-center text-sm text-ink-100">Nenhuma campanha ainda.</div>
         ) : (

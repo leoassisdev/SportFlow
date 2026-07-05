@@ -7,14 +7,14 @@ const KPIS = [
   { label: 'Campeonatos criados (mes)', value: '31', trend: '+7 vs mes anterior', tone: 'brand' as const },
 ];
 
-export const metadata = { title: 'SuperAdmin — Metricas' };
+export const metadata = { title: 'SuperAdmin — Métricas' };
 
 export default function SuperAdminPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
       <div className="relative overflow-hidden rounded-3xl border border-ink-800">
         <Image
-          src="/imagens/v2/geral/superadmin-operacoes.png"
+          src="/imagens/v2/geral/superadmin-operações.png"
           alt=""
           width={1200}
           height={400}
@@ -52,7 +52,7 @@ export default function SuperAdminPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="card">
-          <h2 className="font-display text-xl font-bold">Licencas expirando em 7d</h2>
+          <h2 className="font-display text-xl font-bold">Licenças expirando em 7d</h2>
           <ul className="mt-3 divide-y divide-ink-800 text-sm">
             <li className="flex items-center justify-between py-2">
               <span>Liga do Bairro (Demo)</span>
@@ -67,8 +67,8 @@ export default function SuperAdminPage() {
         <div className="card">
           <h2 className="font-display text-xl font-bold">Alertas de seguranca</h2>
           <ul className="mt-3 space-y-2 text-sm">
-            <li className="rounded-lg border border-ink-800 bg-ink-950 p-3">Gitleaks: 0 findings no ultimo scan (05/07)</li>
-            <li className="rounded-lg border border-ink-800 bg-ink-950 p-3">npm audit: 2 low (nao criticas)</li>
+            <li className="rounded-lg border border-ink-800 bg-ink-950 p-3">Gitleaks: 0 findings no último scan (05/07)</li>
+            <li className="rounded-lg border border-ink-800 bg-ink-950 p-3">npm audit: 2 low (não críticas)</li>
           </ul>
         </div>
       </div>

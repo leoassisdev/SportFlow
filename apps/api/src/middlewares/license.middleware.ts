@@ -23,7 +23,7 @@ export const licenseMiddleware = async (req: Request, _res: Response, next: Next
     select: { status: true },
   });
 
-  // Modo preview e permitido, mas com bloqueios pontuais nos servicos.
+  // Modo preview e permitido, mas com bloqueios pontuais nos serviços.
   if (!tenant || tenant.status === 'expired' || tenant.status === 'suspended') {
     return next(new LicenseExpiredError());
   }

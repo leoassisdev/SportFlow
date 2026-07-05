@@ -45,7 +45,7 @@ export const exchangeCode = async (code: string): Promise<GoogleProfile> => {
   });
   const payload = ticket.getPayload();
   if (!payload || !payload.sub || !payload.email) {
-    throw new UnauthorizedError('Perfil Google invalido');
+    throw new UnauthorizedError('Perfil Google inválido');
   }
   return {
     googleId: payload.sub,
@@ -58,13 +58,13 @@ export const exchangeCode = async (code: string): Promise<GoogleProfile> => {
 
 /**
  * Loga ou cria usuario a partir do perfil Google.
- * - Se ja existe user com esse googleId: retorna
- * - Se ja existe user com o mesmo email: linka (grava googleId)
+ * - Se já existe user com esse googleId: retorna
+ * - Se já existe user com o mesmo email: linka (grava googleId)
  * - Senao: cria Tenant preview + User owner ligado ao Google
  */
 export const upsertGoogleUser = async (profile: GoogleProfile) => {
   if (!profile.emailVerified) {
-    logger.warn({ email: profile.email }, 'Google user com email nao verificado');
+    logger.warn({ email: profile.email }, 'Google user com email não verificado');
   }
 
   const byGoogleId = await prisma.user.findUnique({

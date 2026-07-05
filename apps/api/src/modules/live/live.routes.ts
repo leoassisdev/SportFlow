@@ -6,7 +6,7 @@ const router = Router();
 router.get('/:token', async (req: Request, res: Response) => {
   const raw = req.params.token;
   const token = Array.isArray(raw) ? raw[0] : raw;
-  if (!token) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Placar nao encontrado' } });
+  if (!token) return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Placar não encontrado' } });
 
   const match = await prisma.match.findFirst({
     where: { liveToken: String(token) },
@@ -18,7 +18,7 @@ router.get('/:token', async (req: Request, res: Response) => {
   });
 
   if (!match) {
-    return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Placar nao encontrado' } });
+    return res.status(404).json({ error: { code: 'NOT_FOUND', message: 'Placar não encontrado' } });
   }
 
   return res.json({

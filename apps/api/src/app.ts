@@ -45,7 +45,7 @@ export const buildApp = (): Express => {
   app.use(pinoHttp({ logger }));
   app.use(metricsMiddleware);
 
-  // Healthcheck e metrics (publicos)
+  // Healthcheck e metrics (públicos)
   app.get('/metrics', (req, res) => metricsHandler(req, res).catch(() => res.status(500).end()));
   app.get('/api/health', (_req, res) => {
     res.json({
@@ -61,7 +61,7 @@ export const buildApp = (): Express => {
     res.json({ sports: listPresets() });
   });
 
-  // Rotas publicas
+  // Rotas públicas
   app.use('/api/v1/auth', authRoutes);
   app.use('/api/v1/live', liveRoutes);
   app.use('/api/v1/webhooks', stripeWebhookRoutes);

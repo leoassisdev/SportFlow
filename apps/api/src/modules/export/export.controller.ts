@@ -19,7 +19,7 @@ const requireId = (req: Request): string => {
 const requireChampionshipId = (req: Request): string => {
   const raw = req.query.championshipId;
   const v = Array.isArray(raw) ? raw[0] : raw;
-  if (!v || typeof v !== 'string') throw new UnauthorizedError('championshipId obrigatorio');
+  if (!v || typeof v !== 'string') throw new UnauthorizedError('championshipId obrigatório');
   return v;
 };
 

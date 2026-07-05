@@ -15,7 +15,7 @@ export default function AuditLogsPage() {
         <div className="grid gap-3 md:grid-cols-4">
           <input className="input-base" placeholder="Tenant" />
           <input className="input-base" placeholder="Usuario" />
-          <input className="input-base" placeholder="Acao" />
+          <input className="input-base" placeholder="Ação" />
           <input className="input-base" type="date" />
         </div>
         <button className="btn-primary">Buscar</button>
@@ -28,7 +28,7 @@ export default function AuditLogsPage() {
               <th className="px-4 py-3">Quando</th>
               <th className="px-4 py-3">Tenant</th>
               <th className="px-4 py-3">Usuario</th>
-              <th className="px-4 py-3">Acao</th>
+              <th className="px-4 py-3">Ação</th>
               <th className="px-4 py-3">IP</th>
             </tr>
           </thead>

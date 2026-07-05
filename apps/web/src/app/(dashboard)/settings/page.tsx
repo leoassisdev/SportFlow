@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Configuracoes' };
+export const metadata = { title: 'Configurações' };
 
 export default function SettingsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-8">
       <div>
-        <p className="text-xs uppercase tracking-widest text-ink-100">Configuracoes</p>
+        <p className="text-xs uppercase tracking-widest text-ink-100">Configurações</p>
         <h1 className="font-display text-3xl font-black">Sua conta e seu tenant</h1>
       </div>
 
@@ -20,24 +20,24 @@ export default function SettingsPage() {
       </div>
 
       <div className="card space-y-4">
-        <h2 className="font-display text-xl font-bold">Licenca</h2>
+        <h2 className="font-display text-xl font-bold">Licença</h2>
         <div className="flex items-center justify-between rounded-2xl border border-warning/40 bg-warning/10 p-4">
           <div>
             <p className="font-bold text-warning">Modo preview</p>
             <p className="text-xs text-warning">Voce esta usando o plano gratuito de avaliacao.</p>
           </div>
           <Link href="#" className="btn-accent text-xs">
-            Ativar licenca
+            Ativar licença
           </Link>
         </div>
         <div className="text-sm text-ink-100">
-          <p>Planos disponiveis (mock):</p>
+          <p>Planos disponíveis (mock):</p>
           <ul className="mt-2 list-disc pl-6">
             <li>3 dias — R$ 500</li>
             <li>30 dias — R$ 1.500</li>
             <li>Anual — R$ 12.000</li>
           </ul>
-          <p className="mt-3 text-xs text-ink-400">Pagamento via Stripe. Ativacao automatica apos confirmacao.</p>
+          <p className="mt-3 text-xs text-ink-400">Pagamento via Stripe. Ativação automática após confirmação.</p>
         </div>
       </div>
 

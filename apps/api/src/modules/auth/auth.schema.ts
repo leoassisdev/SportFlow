@@ -9,15 +9,15 @@ export const registerSchema = z.object({
     .max(72)
     .regex(/[a-z]/, 'Precisa de letra minuscula')
     .regex(/[A-Z]/, 'Precisa de letra maiuscula')
-    .regex(/\d/, 'Precisa de numero'),
+    .regex(/\d/, 'Precisa de número'),
   whatsapp: z
     .string()
     .trim()
-    .regex(/^\+?\d[\d\s().-]{7,}$/, 'WhatsApp invalido'),
+    .regex(/^\+?\d[\d\s().-]{7,}$/, 'WhatsApp inválido'),
   sport: z.enum(['futebol', 'volei', 'tenis', 'skate']),
   organizationName: z.string().trim().min(2).max(120),
   acceptPrivacy: z.literal(true, {
-    errorMap: () => ({ message: 'Voce precisa aceitar a Politica de Privacidade' }),
+    errorMap: () => ({ message: 'Voce precisa aceitar a Política de Privacidade' }),
   }),
   acceptEmailMarketing: z.boolean().default(false),
   acceptWhatsappMarketing: z.boolean().default(false),

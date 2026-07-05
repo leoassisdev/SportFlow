@@ -15,7 +15,7 @@ interface RegisterContext {
 export const authService = {
   async register(input: RegisterInput, ctx: RegisterContext = {}) {
     const existing = await authRepository.findUserByEmail(input.email);
-    if (existing) throw new ConflictError('Email ja cadastrado');
+    if (existing) throw new ConflictError('Email já cadastrado');
 
     const passwordHash = await hashPassword(input.password);
     const user = await authRepository.createTenantWithOwner({
@@ -65,12 +65,12 @@ export const authService = {
 
   async login(input: LoginInput) {
     const user = await authRepository.findUserByEmail(input.email);
-    if (!user) throw new UnauthorizedError('Credenciais invalidas');
+    if (!user) throw new UnauthorizedError('Credenciais inválidas');
     if (!user.passwordHash) {
       throw new UnauthorizedError('Esta conta usa login Google — clique em "Entrar com Google"');
     }
     const ok = await comparePassword(input.password, user.passwordHash);
-    if (!ok) throw new UnauthorizedError('Credenciais invalidas');
+    if (!ok) throw new UnauthorizedError('Credenciais inválidas');
     await authRepository.touchLastLogin(user.id);
     const tokens = this.issueTokens({
       sub: user.id,
@@ -90,7 +90,7 @@ export const authService = {
       });
       return tokens;
     } catch {
-      throw new UnauthorizedError('Refresh token invalido');
+      throw new UnauthorizedError('Refresh token inválido');
     }
   },
 

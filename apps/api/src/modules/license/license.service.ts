@@ -33,7 +33,7 @@ export const licenseService = {
                 currency: 'brl',
                 unit_amount: Math.round(input.priceBrl * 100),
                 product_data: {
-                  name: `SportFlow - Licenca ${input.durationDays} dias`,
+                  name: `SportFlow - Licença ${input.durationDays} dias`,
                   description: `Tenant: ${tenant.name}`,
                 },
               },
@@ -48,7 +48,7 @@ export const licenseService = {
           data: { stripeSessionId: session.id },
         });
       } catch (err) {
-        logger.warn({ err }, 'Stripe indisponivel; licenca criada sem session');
+        logger.warn({ err }, 'Stripe indisponível; licença criada sem session');
       }
     }
 
@@ -57,9 +57,9 @@ export const licenseService = {
 
   async activate(licenseId: string, stripePaymentId: string) {
     const license = await prisma.license.findUnique({ where: { id: licenseId } });
-    if (!license) throw new NotFoundError('Licenca');
+    if (!license) throw new NotFoundError('Licença');
     if (license.status === 'active') {
-      throw new ConflictError('Licenca ja ativa (idempotencia)');
+      throw new ConflictError('Licença já ativa (idempotencia)');
     }
     const now = new Date();
     const expiresAt = new Date(now.getTime() + license.durationDays * 24 * 60 * 60 * 1000);

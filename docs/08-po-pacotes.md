@@ -1,8 +1,8 @@
 # Product Owner — Pacotes de Desenvolvimento
 
-**Agente responsavel:** 08-p-o-product-owner
+**Agente responsável:** 08-p-o-product-owner
 **Base:** docs/01-prd + 02-telas + 03-backend + 04-frontend + 05-design
-**Metodo:** cada pacote e uma historia de usuario com criterios de aceite verificaveis por QA.
+**Método:** cada pacote e uma historia de usuario com critérios de aceite verificaveis por QA.
 
 ---
 
@@ -10,11 +10,11 @@
 
 - Cada historia tem ID `SF-XXX`
 - Cada pacote agrupa historias relacionadas de uma fase
-- Criterios de aceite sao verificaveis por testes (unitario, integracao ou E2E)
+- Critérios de aceite são verificaveis por testes (unitario, integração ou E2E)
 - Toda historia sai com owner: Dev Backend (BE), Dev Frontend (FE), ambos (FS)
 
 Priorizacao (MoSCoW):
-- **M** must — MVP nao sai sem
+- **M** must — MVP não sai sem
 - **S** should — desejavel no MVP
 - **C** could — nice-to-have no MVP
 - **W** wont — fica para pos-MVP
@@ -25,24 +25,24 @@ Priorizacao (MoSCoW):
 
 ### SF-001 · Register cria User + Tenant preview
 - Como lead, ao preencher o formulario, quero ter minha conta criada e ser levado ao painel.
-- Criterios:
+- Critérios:
   - POST `/api/v1/auth/register` cria Tenant status `preview` + User role `owner`
   - Retorna cookies HttpOnly `access_token` (15m) e `refresh_token` (7d)
   - Retorna JSON `{ user: UserDTO }`
   - Duplicidade de email → 409 CONFLICT
 - Owner: FS
 
-### SF-002 · Login autentica e retorna sessao
-- Criterios:
+### SF-002 · Login autentica e retorna sessão
+- Critérios:
   - Credenciais corretas → 200 + cookies + user
   - Credenciais erradas → 401 UNAUTHORIZED
   - Rate limit 10 req/min ativado
 - Owner: FS
 
 ### SF-003 · Refresh renova access token
-- Criterios:
+- Critérios:
   - POST `/api/v1/auth/refresh` com refresh valido → renova access
-  - Refresh invalido/expirado → 401
+  - Refresh inválido/expirado → 401
 - Owner: BE
 
 ### SF-004 · Logout limpa cookies
@@ -54,7 +54,7 @@ Priorizacao (MoSCoW):
 - Owner: BE
 
 ### SF-006 · Teste de isolamento de tenant passando
-- E2E: Tenant A cria dado. Tenant B logado nao ve. Nunca. Ponto.
+- E2E: Tenant A cria dado. Tenant B logado não ve. Nunca. Ponto.
 - Owner: BE + QA
 
 ---
@@ -67,21 +67,21 @@ Priorizacao (MoSCoW):
 - Detalhe
 - Editar
 - Arquivar (soft delete)
-- Sport type imutavel apos create
+- Sport type imutavel após create
 - Owner: FS
 
 ### SF-011 · Sport presets carregados
-- GET `/api/v1/sports` retorna 4 esportes (futebol, volei, tenis, skate) com configs padrao
-- Endpoint publico
+- GET `/api/v1/sports` retorna 4 esportes (futebol, vôlei, tênis, skate) com configs padrão
+- Endpoint público
 - Owner: BE
 
 ### SF-012 · CRUD Participantes
 - Criar/listar/editar/excluir participantes vinculados a campeonato
 - Categorias (opcional)
-- Preview mode: max 3 participantes por campeonato → 403 PREVIEW_LIMITED apos 3
+- Preview mode: max 3 participantes por campeonato → 403 PREVIEW_LIMITED após 3
 - Owner: FS
 
-### SF-013 · Wizard visual de criacao
+### SF-013 · Wizard visual de criação
 - Steps: esporte → info → config → categorias → revisao
 - Backgrounds tematicos por esporte (imagens/{esporte}/background-01.png)
 - Owner: FE
@@ -92,11 +92,11 @@ Priorizacao (MoSCoW):
 
 ### SF-020 · Socket.io + Redis adapter
 - Rooms `match:admin:{id}` (auth) e `match:public:{token}` (read-only)
-- Reconexao automatica
+- Reconexao automática
 - Owner: BE
 
 ### SF-021 · Update de placar
-- PATCH `/api/v1/matches/:id/score` grava ScoreEntry + publica evento
+- PATCH `/api/v1/matches/:id/score` grava ScoreEntry + pública evento
 - Broadcast em < 100ms para ambas rooms
 - Owner: FS
 
@@ -105,12 +105,12 @@ Priorizacao (MoSCoW):
 - Client sincroniza baseado no serverTime + interpola
 - Owner: FS
 
-### SF-023 · Undo do ultimo lancamento
+### SF-023 · Undo do último lancamento
 - Nova entrada com delta invertido
 - Owner: BE
 
 ### SF-024 · Painel de placar admin
-- UI grande, mobile-first (arbitro no celular)
+- UI grande, mobile-first (árbitro no celular)
 - Botoes +/- com feedback otimista
 - Owner: FE
 
@@ -118,7 +118,7 @@ Priorizacao (MoSCoW):
 
 ## PACOTE 4 — Financeiro (Fase 4) — M
 
-### SF-030 · CRUD transacoes financeiras
+### SF-030 · CRUD transações financeiras
 - Vinculado a campeonato
 - Preview mode → 403 PREVIEW_LIMITED em toda rota financial/*
 - Owner: FS
@@ -130,9 +130,9 @@ Priorizacao (MoSCoW):
 
 ---
 
-## PACOTE 5 — Exportacao PDF/CSV (Fase 5) — M
+## PACOTE 5 — Exportação PDF/CSV (Fase 5) — M
 
-### SF-040 · Job de exportacao enfileirado
+### SF-040 · Job de exportação enfileirado
 - POST /api/v1/championships/:id/export → 202 + jobId
 - Bull queue processa em background
 - Preview mode → 403 PREVIEW_LIMITED
@@ -145,7 +145,7 @@ Priorizacao (MoSCoW):
 - Signed URL expira 24h
 - Owner: BE
 
-### SF-043 · Notificacao Socket.io + email
+### SF-043 · Notificação Socket.io + email
 - Frontend recebe `export:ready` e atualiza tabela
 - Owner: FS
 
@@ -153,20 +153,20 @@ Priorizacao (MoSCoW):
 
 ## PACOTE 6 — Licenciamento + Stripe (Fase 6) — M
 
-### SF-050 · SuperAdmin cria licenca
+### SF-050 · SuperAdmin cria licença
 - POST `/superadmin/licenses` { tenantId, days, priceBrl } → gera Stripe Checkout Session
 - Owner: BE
 
 ### SF-051 · Envio de email com link
 - Owner: BE
 
-### SF-052 · Webhook Stripe ativa licenca
+### SF-052 · Webhook Stripe ativa licença
 - Verifica assinatura HMAC
 - checkout.session.completed → license.status=active, tenant.status=active
-- Idempotente (2 recebimentos do mesmo evento nao ativam 2x)
+- Idempotente (2 recebimentos do mesmo evento não ativam 2x)
 - Owner: BE
 
-### SF-053 · License Worker expira licencas
+### SF-053 · License Worker expira licenças
 - Bull repeatable hora em hora
 - Marca license.status=expired, tenant.status=expired
 - Owner: BE
@@ -178,14 +178,14 @@ Priorizacao (MoSCoW):
 
 ## PACOTE 7 — SuperAdmin (Fase 7) — M
 
-### SF-060 · Dashboard metricas
+### SF-060 · Dashboard métricas
 - MRR, tenants ativos, leads no mes, campeonatos criados
 - Owner: FS
 
 ### SF-061 · CRUD tenants (visualizar, pausar, override com log)
 - Owner: FS
 
-### SF-062 · CRUD licencas
+### SF-062 · CRUD licenças
 - Owner: FS
 
 ### SF-063 · Visualizar leads
@@ -195,20 +195,20 @@ Priorizacao (MoSCoW):
 ### SF-064 · Audit logs busca
 - Owner: FS
 
-### SF-065 · 2FA obrigatorio SuperAdmin — S
+### SF-065 · 2FA obrigatório SuperAdmin — S
 - Owner: BE
 
 ---
 
-## PACOTE 8 — Placar Publico SSR (Fase 8) — M
+## PACOTE 8 — Placar Público SSR (Fase 8) — M
 
 ### SF-070 · Rota `/live/{token}` SSR
-- GET `/api/v1/live/:token` publico
+- GET `/api/v1/live/:token` público
 - Meta tags OpenGraph com placar atual
 - Sem cookies, sem tracking
 - Owner: FS
 
-### SF-071 · Socket.io read-only para publico
+### SF-071 · Socket.io read-only para público
 - Marca d'agua se tenant preview
 - Owner: FS
 
@@ -218,7 +218,7 @@ Priorizacao (MoSCoW):
 
 ### SF-080 · Unit (Vitest) — cobertura > 80% em services e schemas
 ### SF-081 · Integration (Supertest) — todos os endpoints principais + isolamento de tenant
-### SF-082 · E2E (Playwright) — fluxos criticos F1 a F5 do docs/02
+### SF-082 · E2E (Playwright) — fluxos críticos F1 a F5 do docs/02
 ### SF-083 · CI roda tudo em cada push
 - Owner: QA
 
@@ -250,15 +250,15 @@ Priorizacao (MoSCoW):
 ### SF-110 · Scan gitleaks no CI
 ### SF-111 · npm audit falha em critical
 ### SF-112 · Rate limit + RLS validados em cada release
-### SF-113 · Politica LGPD + hard delete apos 30d
+### SF-113 · Política LGPD + hard delete após 30d
 
 ---
 
-## PACOTE OPCIONAL — Evolucao (pos-MVP)
+## PACOTE OPCIONAL — Evolução (pos-MVP)
 
-- SF-200 · Chaveamento automatico por sport
+- SF-200 · Chaveamento automático por sport
 - SF-201 · WhatsApp API (opc-b) para avisos de expiracao
-- SF-202 · Publico paga inscricao via Stripe Split
+- SF-202 · Público paga inscrição via Stripe Split
 - SF-203 · BI SuperAdmin (opc-c)
 - SF-204 · EDA (16-arquiteto-eventos) quando MRR > R$5k/mes
 
@@ -279,6 +279,6 @@ Cada fase e um marco de release interno. Antes de avancar:
 ## Handoff
 
 - Para **09-dev-frontend + 10-dev-backend:** este backlog e o input direto
-- Para **11-12-13-14 QA:** criterios de aceite viram testes
+- Para **11-12-13-14 QA:** critérios de aceite viram testes
 - Para **15-guardiao:** valida se cada pacote respeita middleware chain, RLS e camadas
 - Para **17-deploy:** pacote 11 pronto pra rodar quando o resto verde

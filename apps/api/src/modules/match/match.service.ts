@@ -63,11 +63,11 @@ export const matchService = {
     });
     if (!match) throw new NotFoundError('Jogo');
     if (match.status === 'finished' || match.status === 'cancelled') {
-      throw new ConflictError('Jogo ja encerrado');
+      throw new ConflictError('Jogo já encerrado');
     }
     const isHome = input.participantId === match.homeParticipantId;
     const isAway = input.participantId === match.awayParticipantId;
-    if (!isHome && !isAway) throw new ConflictError('Participante nao pertence ao jogo');
+    if (!isHome && !isAway) throw new ConflictError('Participante não pertence ao jogo');
 
     const nextHome = isHome ? Math.max(0, match.homeScore + input.delta) : match.homeScore;
     const nextAway = isAway ? Math.max(0, match.awayScore + input.delta) : match.awayScore;

@@ -72,7 +72,7 @@ export const financialService = {
   async update(tenantId: string, id: string, input: UpdateTransactionInput) {
     await guardPreview(tenantId);
     const found = await prisma.financialTransaction.findFirst({ where: { id, tenantId, deletedAt: null } });
-    if (!found) throw new NotFoundError('Transacao');
+    if (!found) throw new NotFoundError('Transação');
     return prisma.financialTransaction.update({
       where: { id },
       data: {
@@ -89,7 +89,7 @@ export const financialService = {
   async remove(tenantId: string, id: string) {
     await guardPreview(tenantId);
     const found = await prisma.financialTransaction.findFirst({ where: { id, tenantId, deletedAt: null } });
-    if (!found) throw new NotFoundError('Transacao');
+    if (!found) throw new NotFoundError('Transação');
     await prisma.financialTransaction.update({ where: { id }, data: { deletedAt: new Date() } });
   },
 };

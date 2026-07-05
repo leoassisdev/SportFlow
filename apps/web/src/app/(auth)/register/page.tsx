@@ -28,7 +28,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setErrMsg(null);
     if (!form.acceptPrivacy) {
-      setErrMsg('Voce precisa aceitar a Politica de Privacidade para continuar.');
+      setErrMsg('Voce precisa aceitar a Política de Privacidade para continuar.');
       return;
     }
     try {
@@ -116,7 +116,7 @@ export default function RegisterPage() {
             minLength={8}
             required
           />
-          <p className="mt-1 text-[10px] text-ink-400">Min 8 caracteres, com maiuscula, minuscula e numero.</p>
+          <p className="mt-1 text-[10px] text-ink-400">Min 8 caracteres, com maiuscula, minuscula e número.</p>
         </div>
         <div>
           <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-100">Time / Liga</label>
@@ -142,7 +142,7 @@ export default function RegisterPage() {
                 }`}
               >
                 <input
-                  type="radio"
+                  type="rádio"
                   name="sport"
                   value={s.key}
                   className="sr-only"
@@ -171,7 +171,7 @@ export default function RegisterPage() {
             <span>
               Li e aceito a{' '}
               <Link href="/privacidade" target="_blank" className="text-brand-400 underline">
-                Politica de Privacidade
+                Política de Privacidade
               </Link>{' '}
               e reconheco que meus dados podem ser tratados conforme descrito nela.
               <span className="text-danger"> *</span>
@@ -188,7 +188,7 @@ export default function RegisterPage() {
             />
             <span>
               Aceito receber <b>emails</b> com novidades, ofertas e comunicados do SportFlow. Posso
-              cancelar quando quiser em Configuracoes.
+              cancelar quando quiser em Configurações.
             </span>
           </label>
 
@@ -202,7 +202,7 @@ export default function RegisterPage() {
             />
             <span>
               Aceito receber <b>mensagens no WhatsApp</b> com novidades, ofertas e comunicados do
-              SportFlow. Posso cancelar quando quiser em Configuracoes.
+              SportFlow. Posso cancelar quando quiser em Configurações.
             </span>
           </label>
         </div>
@@ -218,7 +218,7 @@ export default function RegisterPage() {
         </button>
       </form>
       <p className="mt-6 text-sm text-ink-100">
-        Ja tem conta?{' '}
+        Já tem conta?{' '}
         <Link href="/login" className="text-brand-400 hover:text-brand-300">
           Entrar
         </Link>

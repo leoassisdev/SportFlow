@@ -20,8 +20,8 @@ export default function PrivacidadeSettingsPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <div>
-        <p className="text-xs uppercase tracking-widest text-ink-100">Configuracoes</p>
-        <h1 className="font-display text-3xl font-black">Privacidade e comunicacoes</h1>
+        <p className="text-xs uppercase tracking-widest text-ink-100">Configurações</p>
+        <h1 className="font-display text-3xl font-black">Privacidade e comunicações</h1>
         <p className="text-sm text-ink-100">
           Gerencie o que voce aceita receber. Voce pode mudar de ideia a qualquer momento.
         </p>
@@ -33,19 +33,19 @@ export default function PrivacidadeSettingsPage() {
           <div className="mt-3 h-4 w-full rounded bg-ink-800" />
         </div>
       ) : error ? (
-        <div className="card text-sm text-danger">Nao conseguimos carregar seus consentimentos.</div>
+        <div className="card text-sm text-danger">Não conseguimos carregar seus consentimentos.</div>
       ) : (
         <>
           <div className="card space-y-4">
             <ConsentRow
-              title="Politica de Privacidade"
-              description={`Versao atual: ${data?.currentVersion ?? '—'}. Este aceite e obrigatorio para usar o SportFlow.`}
+              title="Política de Privacidade"
+              description={`Versão atual: ${data?.currentVersion ?? '—'}. Este aceite e obrigatório para usar o SportFlow.`}
               accepted={data?.current.privacy_policy?.accepted ?? false}
               disabled
             />
             <ConsentRow
               title="Emails de marketing"
-              description="Novidades, ofertas de licenca, dicas de organizacao."
+              description="Novidades, ofertas de licença, dicas de organização."
               accepted={data?.current.email_marketing?.accepted ?? false}
               onChange={(v) => mutation.mutate({ kind: 'email_marketing', accepted: v })}
               loading={mutation.isPending}
@@ -60,7 +60,7 @@ export default function PrivacidadeSettingsPage() {
           </div>
 
           <div className="card">
-            <h2 className="font-display text-lg font-bold">Historico</h2>
+            <h2 className="font-display text-lg font-bold">Histórico</h2>
             <ul className="mt-3 space-y-1 font-mono text-xs text-ink-100">
               {(data?.history ?? []).slice(0, 15).map((h) => (
                 <li key={h.id}>
@@ -77,9 +77,9 @@ export default function PrivacidadeSettingsPage() {
           <p className="text-xs text-ink-100">
             Veja a{' '}
             <Link href="/privacidade" className="text-brand-400 underline">
-              Politica de Privacidade completa
+              Política de Privacidade completa
             </Link>{' '}
-            ou solicite exclusao da conta em{' '}
+            ou solicite exclusão da conta em{' '}
             <a href="mailto:privacidade@sportflow.com.br" className="text-brand-400 underline">
               privacidade@sportflow.com.br
             </a>

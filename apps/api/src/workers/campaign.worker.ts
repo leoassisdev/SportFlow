@@ -6,9 +6,9 @@ import { campaignService } from '../modules/campaign/campaign.service.js';
 import { logger } from '../shared/logger.js';
 
 /**
- * Worker de campanhas: puxa audiencia, cria CampaignDelivery por destinatario,
+ * Worker de campanhas: puxa audiência, cria CampaignDelivery por destinatario,
  * respeita opt-in (skipped_no_optin quando falso), envia via provider (stub).
- * Contadores sao atualizados na campanha ao final.
+ * Contadores são atualizados na campanha ao final.
  */
 export const createCampaignWorker = () =>
   new Worker<CampaignJobPayload>(
@@ -18,7 +18,7 @@ export const createCampaignWorker = () =>
       logger.info({ campaignId }, 'campaign worker: iniciando');
 
       const campaign = await prisma.campaign.findUnique({ where: { id: campaignId } });
-      if (!campaign) throw new Error(`Campanha ${campaignId} nao existe`);
+      if (!campaign) throw new Error(`Campanha ${campaignId} não existe`);
 
       const audience = await campaignService.resolveAudience(campaign.audience, campaign.channel);
       let sent = 0;
@@ -43,7 +43,7 @@ export const createCampaignWorker = () =>
           }
 
           // STUB: aqui entra o SDK do provider (Resend / SendGrid / Meta Cloud).
-          // Por ora, so registra como sent com timestamp.
+          // Por ora, só registra como sent com timestamp.
           await new Promise((r) => setTimeout(r, 50));
 
           await prisma.campaignDelivery.create({

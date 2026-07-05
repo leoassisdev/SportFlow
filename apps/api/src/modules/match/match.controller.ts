@@ -27,7 +27,7 @@ export const matchController = {
     const raw = req.query.championshipId;
     const championshipId = Array.isArray(raw) ? raw[0] : raw;
     if (!championshipId || typeof championshipId !== 'string') {
-      throw new UnauthorizedError('championshipId obrigatorio');
+      throw new UnauthorizedError('championshipId obrigatório');
     }
     const items = await matchService.list(tenantOf(req), championshipId);
     res.json({ items });

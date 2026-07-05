@@ -28,6 +28,6 @@ export const authMiddleware = (req: Request, _res: Response, next: NextFunction)
     req.user = payload;
     next();
   } catch {
-    next(new UnauthorizedError('Token invalido ou expirado'));
+    next(new UnauthorizedError('Token inválido ou expirado'));
   }
 };

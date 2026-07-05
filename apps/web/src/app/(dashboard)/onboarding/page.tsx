@@ -22,7 +22,7 @@ export default function OnboardingPage() {
       <div>
         <p className="text-xs uppercase tracking-widest text-ink-100">Bem-vindo(a) 👋</p>
         <h1 className="mt-2 font-display text-3xl font-black">Vamos configurar 30 segundos</h1>
-        <p className="text-sm text-ink-100">Voce pode alterar em Configuracoes depois.</p>
+        <p className="text-sm text-ink-100">Voce pode alterar em Configurações depois.</p>
       </div>
 
       <div className="card space-y-4">
@@ -34,7 +34,7 @@ export default function OnboardingPage() {
             className="mt-1 h-4 w-4 accent-brand-500"
           />
           <span>
-            Aceito receber <b>emails</b> com novidades, ofertas e dicas de organizacao de campeonatos.
+            Aceito receber <b>emails</b> com novidades, ofertas e dicas de organização de campeonatos.
           </span>
         </label>
         <label className="flex items-start gap-3 text-sm text-ink-100">

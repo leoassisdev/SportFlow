@@ -12,8 +12,8 @@ interface ConsentContext {
 
 export const consentService = {
   /**
-   * Grava um consent imutavel. Ao mudar, cria nova linha (nao update).
-   * Ultimo por (userId, kind) reflete estado atual.
+   * Grava um consent imutavel. Ao mudar, cria nova linha (não update).
+   * Último por (userId, kind) reflete estado atual.
    */
   async record(kind: ConsentKind, accepted: boolean, ctx: ConsentContext) {
     return prisma.consent.create({
@@ -35,7 +35,7 @@ export const consentService = {
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
-    // Reduz para "estado atual" por kind (ultima linha vence).
+    // Reduz para "estado atual" por kind (última linha vence).
     const current = new Map<ConsentKind, { accepted: boolean; version: string; at: Date }>();
     for (const c of items) {
       if (!current.has(c.kind)) {

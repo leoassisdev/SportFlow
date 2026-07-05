@@ -33,10 +33,10 @@ ${data.results.map((r, i) => `<tr><td>${i + 1}</td><td>${esc(r.home)}</td><td><b
 </table>` : ''}
 ${modules.includes('financial') ? `
 <h2>Financeiro (${data.financial.length})</h2>
-<table><tr><th>Data</th><th>Tipo</th><th>Categoria</th><th>Valor</th><th>Descricao</th></tr>
+<table><tr><th>Data</th><th>Tipo</th><th>Categoria</th><th>Valor</th><th>Descrição</th></tr>
 ${data.financial.map((t) => `<tr><td>${t.date.toISOString().slice(0, 10)}</td><td>${esc(t.type)}</td><td>${esc(t.category)}</td><td>R$ ${esc(t.amount)}</td><td>${esc(t.description ?? '—')}</td></tr>`).join('')}
 </table>` : ''}
-<p class="footer">Gerado por SportFlow em ${new Date().toISOString()}. Este HTML sera renderizado como PDF em producao (Fase 5.1 — Puppeteer).</p>
+<p class="footer">Gerado por SportFlow em ${new Date().toISOString()}. Este HTML será renderizado como PDF em producao (Fase 5.1 — Puppeteer).</p>
 </body></html>`;
   return Buffer.from(html, 'utf-8');
 };

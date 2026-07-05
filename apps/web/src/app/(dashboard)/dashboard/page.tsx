@@ -14,11 +14,11 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <div className="rounded-2xl border border-warning/40 bg-warning/10 p-4 text-sm text-warning">
-        <b>Modo preview.</b> Voce pode criar 1 campeonato com ate 3 participantes.{' '}
+        <b>Modo preview.</b> Voce pode criar 1 campeonato com até 3 participantes.{' '}
         <Link href="/settings" className="underline">
-          Ative a licenca completa
+          Ative a licença completa
         </Link>{' '}
-        para desbloquear financeiro, exportacao e mais participantes.
+        para desbloquear financeiro, exportação e mais participantes.
       </div>
 
       <div className="relative overflow-hidden rounded-3xl border border-ink-800 bg-ink-900">
@@ -38,8 +38,8 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <KPI label="Total de campeonatos" value={total.toString()} tone="brand" hint={`${active} ativos`} />
         <KPI label="Campeonatos ativos" value={active.toString()} tone="accent" hint="AO VIVO" />
-        <KPI label="Saldo (pendente)" value="—" tone="success" hint="Ative licenca para financeiro" />
-        <KPI label="Placares publicos" value="—" tone="brand" hint="Requer licenca ativa" />
+        <KPI label="Saldo (pendente)" value="—" tone="success" hint="Ative licença para financeiro" />
+        <KPI label="Placares públicos" value="—" tone="brand" hint="Requer licença ativa" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
@@ -89,11 +89,11 @@ export default function DashboardPage() {
           )}
         </div>
         <div className="card">
-          <h2 className="font-display text-xl font-bold">Dica rapida</h2>
+          <h2 className="font-display text-xl font-bold">Dica rápida</h2>
           <ul className="mt-3 space-y-2 text-sm text-ink-100">
             <li>1. Crie um campeonato pelo botao acima.</li>
             <li>2. Cadastre participantes (max 3 no preview).</li>
-            <li>3. Abra o placar admin e compartilhe o link publico.</li>
+            <li>3. Abra o placar admin e compartilhe o link público.</li>
           </ul>
         </div>
       </div>

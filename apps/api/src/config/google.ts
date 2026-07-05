@@ -5,7 +5,7 @@ let clientInstance: OAuth2Client | null = null;
 
 export const getGoogleClient = (): OAuth2Client => {
   if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
-    throw new Error('Google OAuth nao configurado (GOOGLE_CLIENT_ID/SECRET)');
+    throw new Error('Google OAuth não configurado (GOOGLE_CLIENT_ID/SECRET)');
   }
   if (!clientInstance) {
     clientInstance = new OAuth2Client({

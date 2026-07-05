@@ -25,7 +25,7 @@ export default function LeadsPage() {
               <th className="px-4 py-3">WhatsApp</th>
               <th className="px-4 py-3">Esporte</th>
               <th className="px-4 py-3">Data</th>
-              <th className="px-4 py-3 text-right">Acoes</th>
+              <th className="px-4 py-3 text-right">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-ink-800 bg-ink-950">
