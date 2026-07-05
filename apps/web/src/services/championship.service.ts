@@ -7,6 +7,7 @@ export interface Championship {
   status: string;
   startDate: string | null;
   endDate: string | null;
+  rulesConfig?: Record<string, unknown> | null;
   participantsCount: number;
   matchesCount: number;
   createdAt: string;

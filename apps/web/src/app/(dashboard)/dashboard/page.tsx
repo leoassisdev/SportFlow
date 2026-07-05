@@ -1,21 +1,16 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-
-const KPIS = [
-  { label: 'Campeonatos ativos', value: '2', trend: '+1 esta semana', tone: 'brand' as const },
-  { label: 'Proximo jogo', value: '18:30', trend: 'Interbairros · Semifinal', tone: 'accent' as const },
-  { label: 'Saldo do campeonato', value: 'R$ 2.480', trend: 'Interbairros 2026', tone: 'success' as const },
-  { label: 'Placares publicos', value: '1', trend: 'Ao vivo agora', tone: 'brand' as const },
-];
-
-const RECENT = [
-  { id: 'demo-1', name: 'Interbairros 2026', sport: 'Futebol', status: 'Ao vivo', participants: 8 },
-  { id: 'demo-2', name: 'Copa de Volei Escolar', sport: 'Volei', status: 'Agendado', participants: 6 },
-];
-
-export const metadata = { title: 'Painel' };
+import { useChampionships } from '@/hooks/useChampionships';
+import { SPORT_LABEL, type SportKey } from '@/lib/constants';
 
 export default function DashboardPage() {
+  const { data } = useChampionships({ page: 1 });
+  const championships = data?.items ?? [];
+  const total = data?.meta?.total ?? 0;
+  const active = championships.filter((c) => c.status === 'active').length;
+
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       <div className="rounded-2xl border border-warning/40 bg-warning/10 p-4 text-sm text-warning">
@@ -25,13 +20,9 @@ export default function DashboardPage() {
         </Link>{' '}
         para desbloquear financeiro, exportacao e mais participantes.
       </div>
+
       <div className="relative overflow-hidden rounded-3xl border border-ink-800 bg-ink-900">
-        <Image
-          src="/imagens/v2/geral/dashboard-cards.png"
-          alt=""
-          fill
-          className="object-cover opacity-30"
-        />
+        <Image src="/imagens/v2/geral/dashboard-cards.png" alt="" fill className="object-cover opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/50 to-transparent" />
         <div className="relative flex items-end justify-between p-8">
           <div>
@@ -43,16 +34,12 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {KPIS.map((k) => (
-          <div key={k.label} className="card">
-            <p className="text-xs uppercase tracking-widest text-ink-100">{k.label}</p>
-            <p className={`mt-2 font-display text-4xl font-black ${k.tone === 'accent' ? 'text-accent-400' : k.tone === 'success' ? 'text-success' : 'text-brand-400'}`}>
-              {k.value}
-            </p>
-            <p className="mt-1 text-xs text-ink-100">{k.trend}</p>
-          </div>
-        ))}
+        <KPI label="Total de campeonatos" value={total.toString()} tone="brand" hint={`${active} ativos`} />
+        <KPI label="Campeonatos ativos" value={active.toString()} tone="accent" hint="AO VIVO" />
+        <KPI label="Saldo (pendente)" value="—" tone="success" hint="Ative licenca para financeiro" />
+        <KPI label="Placares publicos" value="—" tone="brand" hint="Requer licenca ativa" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
@@ -63,58 +50,64 @@ export default function DashboardPage() {
               Ver todos →
             </Link>
           </div>
-          <ul className="divide-y divide-ink-800">
-            {RECENT.map((c) => (
-              <li key={c.id} className="flex items-center justify-between py-3">
-                <div>
-                  <p className="font-medium">{c.name}</p>
-                  <p className="text-xs text-ink-100">
-                    {c.sport} · {c.participants} participantes
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`badge ${
-                      c.status === 'Ao vivo'
-                        ? 'animate-pulseGlow bg-accent-500 text-white'
-                        : 'bg-ink-800 text-ink-100'
-                    }`}
-                  >
-                    {c.status}
-                  </span>
-                  <Link href={`/championships/${c.id}`} className="btn-ghost text-xs">
-                    Abrir
-                  </Link>
-                </div>
-              </li>
-            ))}
-          </ul>
+          {championships.length === 0 ? (
+            <div className="grid place-items-center py-8 text-center">
+              <p className="text-4xl">🏆</p>
+              <p className="mt-3 font-display text-lg font-bold">Nenhum campeonato ainda</p>
+              <p className="mt-1 text-xs text-ink-100">Comece pelo primeiro.</p>
+              <Link href="/championships/new" className="btn-primary mt-4 text-xs">
+                Criar
+              </Link>
+            </div>
+          ) : (
+            <ul className="divide-y divide-ink-800">
+              {championships.slice(0, 5).map((c) => (
+                <li key={c.id} className="flex items-center justify-between py-3">
+                  <div>
+                    <p className="font-medium">{c.name}</p>
+                    <p className="text-xs text-ink-100">
+                      {SPORT_LABEL[c.sportType as SportKey] ?? c.sportType} · {c.participantsCount} participantes
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`badge ${
+                        c.status === 'active'
+                          ? 'animate-pulseGlow bg-accent-500 text-white'
+                          : 'bg-ink-800 text-ink-100'
+                      }`}
+                    >
+                      {c.status}
+                    </span>
+                    <Link href={`/championships/${c.id}`} className="btn-ghost text-xs">
+                      Abrir
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className="card">
-          <h2 className="font-display text-xl font-bold">Placar publico ao vivo</h2>
-          <p className="mt-1 text-xs text-ink-100">Compartilhe o link com quem quiser acompanhar.</p>
-          <div className="mt-4 rounded-xl border border-ink-800 bg-ink-950 p-4">
-            <div className="flex items-center justify-between text-xs text-ink-100">
-              <span className="badge animate-pulseGlow bg-accent-500 text-white">AO VIVO</span>
-              <span className="font-mono">42:18</span>
-            </div>
-            <div className="mt-3 flex items-center justify-between">
-              <div className="text-center">
-                <p className="text-[10px] uppercase text-ink-100">Bairro Alto</p>
-                <p className="font-display text-4xl font-black">3</p>
-              </div>
-              <span className="font-display text-3xl text-brand-500">×</span>
-              <div className="text-center">
-                <p className="text-[10px] uppercase text-ink-100">Vila Norte</p>
-                <p className="font-display text-4xl font-black">1</p>
-              </div>
-            </div>
-          </div>
-          <Link href="/live/demo-token" className="btn-primary mt-4 w-full text-center">
-            Abrir placar publico
-          </Link>
+          <h2 className="font-display text-xl font-bold">Dica rapida</h2>
+          <ul className="mt-3 space-y-2 text-sm text-ink-100">
+            <li>1. Crie um campeonato pelo botao acima.</li>
+            <li>2. Cadastre participantes (max 3 no preview).</li>
+            <li>3. Abra o placar admin e compartilhe o link publico.</li>
+          </ul>
         </div>
       </div>
+    </div>
+  );
+}
+
+function KPI({ label, value, tone, hint }: { label: string; value: string; tone: 'brand' | 'accent' | 'success'; hint?: string }) {
+  const color = tone === 'accent' ? 'text-accent-400' : tone === 'success' ? 'text-success' : 'text-brand-400';
+  return (
+    <div className="card">
+      <p className="text-xs uppercase tracking-widest text-ink-100">{label}</p>
+      <p className={`mt-2 font-display text-4xl font-black ${color}`}>{value}</p>
+      {hint ? <p className="mt-1 text-xs text-ink-100">{hint}</p> : null}
     </div>
   );
 }
