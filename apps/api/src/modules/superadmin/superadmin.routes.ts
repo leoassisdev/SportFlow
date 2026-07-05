@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { campaignRoutes } from '../campaign/campaign.routes.js';
 import { superadminController } from './superadmin.controller.js';
 
 const router = Router();
@@ -9,5 +10,7 @@ router.get('/tenants/:id', (req, res, next) => superadminController.getTenant(re
 router.get('/leads', (req, res, next) => superadminController.listLeads(req, res).catch(next));
 router.get('/audit-logs', (req, res, next) => superadminController.listAuditLogs(req, res).catch(next));
 router.post('/licenses', (req, res, next) => superadminController.createLicense(req, res).catch(next));
+
+router.use('/campaigns', campaignRoutes);
 
 export { router as superadminRoutes };

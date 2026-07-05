@@ -1,8 +1,9 @@
+import { createCampaignWorker } from './campaign.worker.js';
 import { createExportWorker } from './export.worker.js';
 import { createLicenseWorker } from './license.worker.js';
 import { logger } from '../shared/logger.js';
 
-const workers = [createExportWorker(), createLicenseWorker()];
+const workers = [createExportWorker(), createLicenseWorker(), createCampaignWorker()];
 
 const shutdown = async () => {
   logger.info('encerrando workers');

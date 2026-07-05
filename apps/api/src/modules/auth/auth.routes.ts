@@ -1,8 +1,11 @@
 import { Router } from 'express';
 import { authRateLimit } from '../../middlewares/rateLimit.middleware.js';
 import { authController } from './auth.controller.js';
+import { googleAuthRoutes } from './google.routes.js';
 
 const router = Router();
+
+router.use('/google', googleAuthRoutes);
 
 router.post('/register', authRateLimit, (req, res, next) =>
   authController.register(req, res).catch(next),

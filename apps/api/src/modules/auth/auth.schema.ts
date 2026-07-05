@@ -16,6 +16,11 @@ export const registerSchema = z.object({
     .regex(/^\+?\d[\d\s().-]{7,}$/, 'WhatsApp invalido'),
   sport: z.enum(['futebol', 'volei', 'tenis', 'skate']),
   organizationName: z.string().trim().min(2).max(120),
+  acceptPrivacy: z.literal(true, {
+    errorMap: () => ({ message: 'Voce precisa aceitar a Politica de Privacidade' }),
+  }),
+  acceptEmailMarketing: z.boolean().default(false),
+  acceptWhatsappMarketing: z.boolean().default(false),
 });
 
 export const loginSchema = z.object({

@@ -15,6 +15,7 @@ import { tenantMiddleware } from './middlewares/tenant.middleware.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { championshipRoutes } from './modules/championship/championship.routes.js';
 import { listPresets } from './modules/championship/sport-presets.js';
+import { consentRoutes } from './modules/consent/consent.routes.js';
 import { exportRoutes } from './modules/export/export.routes.js';
 import { financialRoutes } from './modules/financial/financial.routes.js';
 import { licenseRoutes } from './modules/license/license.routes.js';
@@ -78,6 +79,7 @@ export const buildApp = (): Express => {
   app.use('/api/v1/financial', financialRoutes);
   app.use('/api/v1/export-jobs', exportRoutes);
   app.use('/api/v1/licenses', licenseRoutes);
+  app.use('/api/v1/consents', consentRoutes);
 
   // SuperAdmin
   app.use('/superadmin', superadminMiddleware, superadminRoutes);

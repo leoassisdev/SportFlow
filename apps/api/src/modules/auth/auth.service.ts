@@ -1,12 +1,19 @@
+import { prisma } from '../../config/database.js';
 import { ConflictError, UnauthorizedError } from '../../shared/errors.js';
 import { comparePassword, generateSlug, hashPassword } from '../../shared/crypto.js';
+import { consentService } from '../consent/consent.service.js';
 import { authRepository } from './auth.repository.js';
 import { createAccessToken, createRefreshToken, verifyRefreshToken } from './auth.factory.js';
 import { toUserResponse } from './auth.mapper.js';
 import type { LoginInput, RegisterInput } from './auth.schema.js';
 
+interface RegisterContext {
+  ipAddress?: string | null;
+  userAgent?: string | null;
+}
+
 export const authService = {
-  async register(input: RegisterInput) {
+  async register(input: RegisterInput, ctx: RegisterContext = {}) {
     const existing = await authRepository.findUserByEmail(input.email);
     if (existing) throw new ConflictError('Email ja cadastrado');
 
@@ -26,7 +33,24 @@ export const authService = {
       email: input.email,
       whatsapp: input.whatsapp,
       sport: input.sport,
+      optInEmail: input.acceptEmailMarketing,
+      optInWhatsapp: input.acceptWhatsappMarketing,
     });
+
+    // Aplica opt-in no User desde o registro.
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        optInEmail: input.acceptEmailMarketing,
+        optInWhatsapp: input.acceptWhatsappMarketing,
+      },
+    });
+
+    // Registra consents imutaveis
+    const baseCtx = { userId: user.id, tenantId: user.tenantId, ipAddress: ctx.ipAddress, userAgent: ctx.userAgent };
+    await consentService.record('privacy_policy', true, baseCtx);
+    await consentService.record('email_marketing', input.acceptEmailMarketing, baseCtx);
+    await consentService.record('whatsapp_marketing', input.acceptWhatsappMarketing, baseCtx);
 
     const full = await authRepository.findUserByEmail(input.email);
     if (!full) throw new UnauthorizedError();
@@ -42,6 +66,9 @@ export const authService = {
   async login(input: LoginInput) {
     const user = await authRepository.findUserByEmail(input.email);
     if (!user) throw new UnauthorizedError('Credenciais invalidas');
+    if (!user.passwordHash) {
+      throw new UnauthorizedError('Esta conta usa login Google — clique em "Entrar com Google"');
+    }
     const ok = await comparePassword(input.password, user.passwordHash);
     if (!ok) throw new UnauthorizedError('Credenciais invalidas');
     await authRepository.touchLastLogin(user.id);

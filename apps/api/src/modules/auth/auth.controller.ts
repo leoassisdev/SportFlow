@@ -25,7 +25,10 @@ const refreshCookie: CookieOptions = {
 export const authController = {
   async register(req: Request, res: Response) {
     const input = registerSchema.parse(req.body);
-    const { user, accessToken, refreshToken } = await authService.register(input);
+    const { user, accessToken, refreshToken } = await authService.register(input, {
+      ipAddress: req.ip ?? null,
+      userAgent: req.headers['user-agent'] ?? null,
+    });
     res.cookie('access_token', accessToken, accessCookie);
     res.cookie('refresh_token', refreshToken, refreshCookie);
     return res.status(201).json({ user });
