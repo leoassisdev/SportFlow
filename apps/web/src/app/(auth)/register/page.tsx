@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { GoogleButton } from '@/components/auth/GoogleButton';
 import { SPORTS, type SportKey } from '@/lib/constants';
 import { useRegister } from '@/hooks/useAuthMutations';
 import { asApiError } from '@/lib/api';
@@ -16,6 +17,9 @@ export default function RegisterPage() {
     whatsapp: '',
     sport: 'futebol' as SportKey,
     organizationName: '',
+    acceptPrivacy: false,
+    acceptEmailMarketing: false,
+    acceptWhatsappMarketing: false,
   });
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const register = useRegister();
@@ -23,8 +27,22 @@ export default function RegisterPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrMsg(null);
+    if (!form.acceptPrivacy) {
+      setErrMsg('Voce precisa aceitar a Politica de Privacidade para continuar.');
+      return;
+    }
     try {
-      await register.mutateAsync(form);
+      await register.mutateAsync({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        whatsapp: form.whatsapp,
+        sport: form.sport,
+        organizationName: form.organizationName,
+        acceptPrivacy: true,
+        acceptEmailMarketing: form.acceptEmailMarketing,
+        acceptWhatsappMarketing: form.acceptWhatsappMarketing,
+      });
       router.push('/dashboard');
     } catch (err) {
       setErrMsg(asApiError(err).message);
@@ -40,7 +58,17 @@ export default function RegisterPage() {
       <p className="mt-2 text-sm text-ink-100">
         Sem cartao. Voce cria seu primeiro campeonato em modo preview.
       </p>
-      <form className="mt-8 space-y-4" onSubmit={submit}>
+
+      <div className="mt-6">
+        <GoogleButton label="Continuar com Google" />
+      </div>
+      <div className="my-6 flex items-center gap-3 text-xs uppercase text-ink-100">
+        <div className="h-px flex-1 bg-ink-800" />
+        ou preencha
+        <div className="h-px flex-1 bg-ink-800" />
+      </div>
+
+      <form className="space-y-4" onSubmit={submit}>
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-100">Nome</label>
@@ -127,6 +155,58 @@ export default function RegisterPage() {
             ))}
           </div>
         </div>
+
+        <div className="space-y-3 rounded-2xl border border-ink-800 bg-ink-900/60 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-100">Consentimentos</p>
+
+          <label className="flex items-start gap-3 text-sm text-ink-100">
+            <input
+              type="checkbox"
+              checked={form.acceptPrivacy}
+              onChange={(e) => upd('acceptPrivacy', e.target.checked)}
+              data-testid="accept-privacy"
+              className="mt-1 h-4 w-4 accent-brand-500"
+              required
+            />
+            <span>
+              Li e aceito a{' '}
+              <Link href="/privacidade" target="_blank" className="text-brand-400 underline">
+                Politica de Privacidade
+              </Link>{' '}
+              e reconheco que meus dados podem ser tratados conforme descrito nela.
+              <span className="text-danger"> *</span>
+            </span>
+          </label>
+
+          <label className="flex items-start gap-3 text-sm text-ink-100">
+            <input
+              type="checkbox"
+              checked={form.acceptEmailMarketing}
+              onChange={(e) => upd('acceptEmailMarketing', e.target.checked)}
+              data-testid="accept-email-marketing"
+              className="mt-1 h-4 w-4 accent-brand-500"
+            />
+            <span>
+              Aceito receber <b>emails</b> com novidades, ofertas e comunicados do SportFlow. Posso
+              cancelar quando quiser em Configuracoes.
+            </span>
+          </label>
+
+          <label className="flex items-start gap-3 text-sm text-ink-100">
+            <input
+              type="checkbox"
+              checked={form.acceptWhatsappMarketing}
+              onChange={(e) => upd('acceptWhatsappMarketing', e.target.checked)}
+              data-testid="accept-whatsapp-marketing"
+              className="mt-1 h-4 w-4 accent-brand-500"
+            />
+            <span>
+              Aceito receber <b>mensagens no WhatsApp</b> com novidades, ofertas e comunicados do
+              SportFlow. Posso cancelar quando quiser em Configuracoes.
+            </span>
+          </label>
+        </div>
+
         {errMsg ? <p className="text-sm text-danger">{errMsg}</p> : null}
         <button
           type="submit"

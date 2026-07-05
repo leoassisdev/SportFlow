@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { CalendarClock, LayoutDashboard, Trophy, Wallet, LogOut, Settings } from 'lucide-react';
+import { CalendarClock, LayoutDashboard, Trophy, Wallet, LogOut, Settings, Shield } from 'lucide-react';
 
 const NAV = [
   { href: '/dashboard', label: 'Painel', icon: LayoutDashboard },
@@ -7,6 +7,7 @@ const NAV = [
   { href: '/dashboard#agenda', label: 'Agenda', icon: CalendarClock },
   { href: '/dashboard#financeiro', label: 'Financeiro', icon: Wallet },
   { href: '/settings', label: 'Configuracoes', icon: Settings },
+  { href: '/settings/privacidade', label: 'Privacidade', icon: Shield },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

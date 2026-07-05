@@ -16,6 +16,9 @@ export interface RegisterInput {
   whatsapp: string;
   sport: 'futebol' | 'volei' | 'tenis' | 'skate';
   organizationName: string;
+  acceptPrivacy: true;
+  acceptEmailMarketing: boolean;
+  acceptWhatsappMarketing: boolean;
 }
 
 export interface LoginInput {

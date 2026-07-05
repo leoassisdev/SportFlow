@@ -1,16 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { GoogleButton } from '@/components/auth/GoogleButton';
 import { useLogin } from '@/hooks/useAuthMutations';
 import { asApiError } from '@/lib/api';
 
+export const dynamic = 'force-dynamic';
+
+const GOOGLE_ERR_MSG: Record<string, string> = {
+  google_no_code: 'Autorizacao Google incompleta.',
+  google_state: 'Sessao Google invalida (CSRF). Tente novamente.',
+  google_unauthorized: 'Nao foi possivel validar sua conta Google.',
+  google_failed: 'Falha no login Google. Tente de novo.',
+  google_disabled: 'Login Google indisponivel no momento.',
+};
+
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<p className="text-sm text-ink-100">Carregando...</p>}>
+      <LoginInner />
+    </Suspense>
+  );
+}
+
+function LoginInner() {
   const router = useRouter();
+  const params = useSearchParams();
+  const googleErr = params.get('error');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errMsg, setErrMsg] = useState<string | null>(null);
+  const [errMsg, setErrMsg] = useState<string | null>(
+    googleErr && GOOGLE_ERR_MSG[googleErr] ? GOOGLE_ERR_MSG[googleErr]! : null,
+  );
   const login = useLogin();
 
   const submit = async (e: React.FormEvent) => {
@@ -30,7 +53,15 @@ export default function LoginPage() {
       <p className="mt-2 text-sm text-ink-100">
         Bem-vindo de volta. Acesse seu painel do campeonato.
       </p>
-      <form className="mt-8 space-y-4" onSubmit={submit}>
+      <div className="mt-6">
+        <GoogleButton />
+      </div>
+      <div className="my-6 flex items-center gap-3 text-xs uppercase text-ink-100">
+        <div className="h-px flex-1 bg-ink-800" />
+        ou com email
+        <div className="h-px flex-1 bg-ink-800" />
+      </div>
+      <form className="space-y-4" onSubmit={submit}>
         <div>
           <label htmlFor="email" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-ink-100">
             Email
