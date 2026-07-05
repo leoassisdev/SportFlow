@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function MatchAdminPage({ params }: { params: { id: string; matchId: string } }) {
@@ -29,6 +30,13 @@ export default function MatchAdminPage({ params }: { params: { id: string; match
       </div>
 
       <div className="relative overflow-hidden rounded-3xl border border-ink-800 bg-gradient-to-b from-ink-900 to-ink-950 p-8 shadow-glow">
+        <Image
+          src="/imagens/v2/geral/placar-live.png"
+          alt=""
+          fill
+          className="object-cover opacity-25"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-ink-950/60 via-ink-950/40 to-ink-950/80" />
         <div className="absolute inset-0 bg-grid-glow opacity-70" />
         <div className="relative">
           <div className="mb-6 flex items-center justify-between">

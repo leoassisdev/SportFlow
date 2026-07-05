@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const MOCK = [
@@ -11,14 +12,24 @@ export const metadata = { title: 'Campeonatos' };
 export default function ChampionshipsPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-3xl font-black">Campeonatos</h1>
-          <p className="text-sm text-ink-100">Todos os torneios que voce criou.</p>
+      <div className="relative overflow-hidden rounded-3xl border border-ink-800">
+        <Image
+          src="/imagens/v2/geral/campeonatos-cards.png"
+          alt=""
+          width={1200}
+          height={400}
+          className="h-40 w-full object-cover opacity-40"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/70 to-transparent" />
+        <div className="absolute inset-0 flex items-center justify-between p-8">
+          <div>
+            <h1 className="font-display text-3xl font-black">Campeonatos</h1>
+            <p className="text-sm text-ink-100">Todos os torneios que voce criou.</p>
+          </div>
+          <Link href="/championships/new" className="btn-accent">
+            + Novo campeonato
+          </Link>
         </div>
-        <Link href="/championships/new" className="btn-accent">
-          + Novo campeonato
-        </Link>
       </div>
       <div className="overflow-hidden rounded-2xl border border-ink-800">
         <table className="w-full text-sm">

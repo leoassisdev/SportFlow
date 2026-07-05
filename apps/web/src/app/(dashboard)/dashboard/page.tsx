@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const KPIS = [
@@ -24,14 +25,23 @@ export default function DashboardPage() {
         </Link>{' '}
         para desbloquear financeiro, exportacao e mais participantes.
       </div>
-      <div className="flex items-end justify-between">
-        <div>
-          <h1 className="font-display text-3xl font-black">Bem-vindo de volta</h1>
-          <p className="text-sm text-ink-100">O que rola hoje na sua arena.</p>
+      <div className="relative overflow-hidden rounded-3xl border border-ink-800 bg-ink-900">
+        <Image
+          src="/imagens/v2/geral/dashboard-cards.png"
+          alt=""
+          fill
+          className="object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/50 to-transparent" />
+        <div className="relative flex items-end justify-between p-8">
+          <div>
+            <h1 className="font-display text-3xl font-black">Bem-vindo de volta</h1>
+            <p className="text-sm text-ink-100">O que rola hoje na sua arena.</p>
+          </div>
+          <Link href="/championships/new" className="btn-accent">
+            + Criar campeonato
+          </Link>
         </div>
-        <Link href="/championships/new" className="btn-accent">
-          + Criar campeonato
-        </Link>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {KPIS.map((k) => (

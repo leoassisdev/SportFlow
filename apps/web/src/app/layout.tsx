@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { APP_NAME } from '@/lib/constants';
+import { Providers } from '@/lib/providers';
 
 export const metadata: Metadata = {
   title: {
@@ -24,7 +25,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-ink-950">{children}</body>
+      <body className="min-h-screen bg-ink-950">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

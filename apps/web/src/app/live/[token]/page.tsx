@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -9,8 +10,8 @@ export const generateMetadata = ({ params }: Props): Metadata => ({
   description: 'Placar em tempo real do SportFlow',
 });
 
-export default function LivePage({ params }: Props) {
-  // Mock — na Fase 8 vira fetch SSR + Socket.io hydration
+export default function LivePage({ params: _params }: Props) {
+  // Mock — hydration Socket.io vira na Fase 8 real
   const data = {
     championship: 'Interbairros 2026',
     stage: 'Semifinal',
@@ -18,11 +19,20 @@ export default function LivePage({ params }: Props) {
     away: { name: 'Vila Norte', score: 1 },
     timer: '42:18',
     isPreview: true,
+    sport: 'futebol' as const,
   };
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-ink-950 px-6 py-12 text-center">
-      <div className="pointer-events-none absolute inset-0 bg-grid-glow" />
+      <Image
+        src={`/imagens/v2/${data.sport}/background-hero.png`}
+        alt=""
+        fill
+        priority
+        className="object-cover opacity-30"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/70 to-ink-950/40" />
+
       {data.isPreview ? (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <p className="rotate-[-25deg] font-display text-[12vw] font-black text-white/[0.04]">
@@ -33,13 +43,13 @@ export default function LivePage({ params }: Props) {
 
       <div className="relative w-full max-w-6xl">
         <div className="mb-6 flex items-center justify-between text-sm text-ink-100">
-          <span className="font-display text-lg font-bold uppercase tracking-widest text-ink-100">
+          <span className="font-display text-lg font-bold uppercase tracking-widest text-ink-100 drop-shadow-lg">
             {data.championship} · {data.stage}
           </span>
           <span className="badge animate-pulseGlow bg-accent-500 text-white">AO VIVO</span>
         </div>
 
-        <div className="rounded-3xl border border-ink-800 bg-gradient-to-b from-ink-900/70 to-ink-950 p-10 shadow-glow">
+        <div className="rounded-3xl border border-ink-800 bg-gradient-to-b from-ink-900/90 to-ink-950/95 p-10 shadow-glow backdrop-blur">
           <div className="grid grid-cols-3 items-center gap-4">
             <div className="text-center">
               <p className="mb-4 font-display text-3xl font-bold uppercase tracking-wide text-ink-100">
