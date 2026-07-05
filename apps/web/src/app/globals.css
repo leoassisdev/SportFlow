@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply bg-ink-950 text-ink-50 antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  ::selection {
+    @apply bg-brand-500 text-ink-950;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-ink-950;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-2.5 text-sm font-semibold text-ink-950 shadow-glowSm transition hover:bg-brand-600 hover:shadow-glow disabled:opacity-60;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center rounded-xl bg-accent-500 px-5 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-glowAccent transition hover:bg-accent-600 disabled:opacity-60;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center rounded-xl border border-ink-700 bg-transparent px-4 py-2.5 text-sm font-medium text-ink-100 transition hover:border-ink-600 hover:bg-ink-800;
+  }
+
+  .card {
+    @apply rounded-2xl border border-ink-800 bg-ink-900 p-6 transition hover:border-ink-700;
+  }
+
+  .input-base {
+    @apply w-full rounded-xl border border-ink-700 bg-ink-800 px-3.5 py-2.5 text-sm text-ink-50 placeholder:text-ink-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+}
