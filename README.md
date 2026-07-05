@@ -36,9 +36,9 @@ O SportFlow permite que **organizadores de eventos esportivos** (Contratantes) c
 | **Monorepo** | Turborepo |
 | **Infra** | Docker + Docker Compose |
 | **CI/CD** | GitHub Actions |
-| **Deploy** | Railway / Render (inicial) → AWS (escala) |
+| **Deploy** | Azure App Service (`plan-tcc` / `rg-webapps`) via GitHub Actions |
 | **Observabilidade** | Prometheus + Grafana + Pino + Sentry |
-| **Storage** | S3 / Cloudflare R2 |
+| **Storage** | Azure Blob Storage (ou S3/R2 conforme decisao final) |
 | **Testes** | Vitest + Supertest + Playwright |
 
 ---
@@ -448,33 +448,26 @@ docker-compose down      # Parar containers
 
 ## Deploy
 
-### Railway (Recomendado para inicio)
+**Alvo unico:** Azure App Service, sempre via GitHub Actions.
 
-```bash
-# Backend
-railway link
-railway up --service api
+- **App Service Plan:** `plan-tcc`
+- **Resource Group:** `rg-webapps`
+- **Apps:** `sportflow-api` (backend) e `sportflow-web` (frontend)
+- **SCM Basic Auth Publishing:** `true`
+- **Basic Authentication:** `true`
 
-# Frontend
-railway up --service web
-```
-
-### AWS (Escala)
-
-```
-EC2 / ECS Fargate → API servers (auto-scaling)
-RDS               → PostgreSQL (managed)
-ElastiCache       → Redis (managed)
-S3                → File storage (exports)
-CloudFront        → CDN (static assets)
-```
+**PROIBIDO:** deploy manual, zip deploy, `az webapp deploy --src-path`, upload via Kudu, publicacao FTP.
 
 ### CI/CD (GitHub Actions)
 
-Push para `main` dispara deploy automatico:
-- `apps/api/**` alterado → deploy backend
-- `apps/web/**` alterado → deploy frontend
-- `workflow_dispatch` para deploy manual
+Push para `main` dispara deploy automatico via `azure/webapps-deploy@v3`:
+- `apps/api/**` alterado → deploy backend (`sportflow-api`)
+- `apps/web/**` alterado → deploy frontend (`sportflow-web`)
+- `workflow_dispatch` para deploy manual autorizado
+
+Publish profile no GitHub Secrets:
+- `AZURE_WEBAPP_PUBLISH_PROFILE_API`
+- `AZURE_WEBAPP_PUBLISH_PROFILE_WEB`
 
 ---
 
@@ -496,16 +489,27 @@ Para o MVP mais rapido com features funcionais:
 
 ## Esteira de Agentes FlowCore
 
-Este projeto segue a esteira completa de 21 agentes definida em `/AGENTE_SAAS/`:
+Fonte da verdade: `~/dev/AGENTES_ARQUITETURA/ARQUITETO-SKILLS/`
+Padrao obrigatorio de entrega: `00-padroes/ENTREGA_PREMIUM_FLOWCORE.md`
 
 ```
-01-PRD Analyst → 02-Analista de Tela → 03/04/05 (paralelo) →
-06-Dev Mockado (GATE) → 07-Database → 08-P.O. →
-09/10 Dev (paralelo) → 11/12/13/14 QA (sequencial) →
-15-Guardiao → 16-Eventos → 17-Deploy
+DESCOBERTA        01-prd-analyst → 02-analista-de-tela
+ARQUITETURA       02-b (infra) + 02-c (SEGURANCA) + 03 + 04 + 05  [paralelo]
+VALIDACAO         06-dev-mockado  [GATE cliente]
+DADOS+PLANO       07-arquiteto-sql-plus-mongodb + 08-p-o-product-owner
+DESENVOLVIMENTO   09-dev-frontend + 10-dev-backend + 15-guardiao (recorrente)
+QA (sequencial)   11-qa-unitario → 12-qa-integracao → 13-qa-tela → 14-playwright-e2e
+EVOLUCAO          16-arquiteto-eventos  (so com sistema 100% aprovado)
+DEPLOY            17-deploy-cicd  (Azure App Service via GitHub Actions)
+MOBILE            18/19  — NAO se aplica (SportFlow e web-only)
+OPCIONAIS         opc-a-ui-ux, opc-b-mensageria, opc-c-dados-bi
 ```
 
-Consulte `CLAUDE.md` neste repositorio para o guia completo de construcao.
+Regras herdadas:
+- Deploy SEMPRE via GitHub Actions (NUNCA zip deploy)
+- Nenhum agente versiona segredo, token, `.env`, credencial ou certificado
+- Handoff registra entrada, saida, decisoes, pendencias e proximo agente
+- Seguranca e continua (02-c em arquitetura + 15 em dev/QA), nao uma fase final
 
 ---
 
