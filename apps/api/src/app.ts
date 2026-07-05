@@ -15,8 +15,14 @@ import { tenantMiddleware } from './middlewares/tenant.middleware.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { championshipRoutes } from './modules/championship/championship.routes.js';
 import { listPresets } from './modules/championship/sport-presets.js';
+import { exportRoutes } from './modules/export/export.routes.js';
+import { financialRoutes } from './modules/financial/financial.routes.js';
+import { licenseRoutes } from './modules/license/license.routes.js';
+import { stripeWebhookRoutes } from './modules/license/stripe.webhook.js';
 import { liveRoutes } from './modules/live/live.routes.js';
+import { matchRoutes } from './modules/match/match.routes.js';
 import { participantRoutes } from './modules/participant/participant.routes.js';
+import { superadminRoutes } from './modules/superadmin/superadmin.routes.js';
 import { logger } from './shared/logger.js';
 
 export const buildApp = (): Express => {
@@ -54,7 +60,7 @@ export const buildApp = (): Express => {
   // Rotas publicas
   app.use('/api/v1/auth', authRoutes);
   app.use('/api/v1/live', liveRoutes);
-  // TODO Fase 6: /api/v1/webhooks/stripe
+  app.use('/api/v1/webhooks', stripeWebhookRoutes);
 
   // Middleware chain (rotas protegidas)
   app.use(authMiddleware);
@@ -65,12 +71,13 @@ export const buildApp = (): Express => {
 
   app.use('/api/v1/championships', championshipRoutes);
   app.use('/api/v1/participants', participantRoutes);
-  // TODO Fase 3+: matches, scoreboard, financial, export
+  app.use('/api/v1/matches', matchRoutes);
+  app.use('/api/v1/financial', financialRoutes);
+  app.use('/api/v1/export-jobs', exportRoutes);
+  app.use('/api/v1/licenses', licenseRoutes);
 
   // SuperAdmin
-  app.use('/superadmin', superadminMiddleware, (_req, res) => {
-    res.json({ ok: true, hint: 'SuperAdmin routes serao registradas na Fase 7' });
-  });
+  app.use('/superadmin', superadminMiddleware, superadminRoutes);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
