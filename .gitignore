@@ -56,3 +56,17 @@ estrutura/
 
 # Documentacao interna (passo a passo confidencial)
 CLAUDE.md
+
+# COFRE — credenciais sensiveis (Google OAuth, Stripe live, Azure publish
+# profiles, chaves de servico). NUNCA versionar. Ver docs/COFRE.md
+.cofre/
+*.pem
+*.key
+*.p12
+*.pfx
+google-oauth-*.json
+service-account-*.json
+publish-profile-*.xml
+publish-profile-*.PublishSettings
+credentials.json
+client_secret*.json
