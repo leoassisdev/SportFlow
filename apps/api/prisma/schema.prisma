@@ -64,6 +64,41 @@ enum ExportStatus {
   failed
 }
 
+enum ConsentKind {
+  privacy_policy
+  terms_of_service
+  email_marketing
+  whatsapp_marketing
+}
+
+enum CampaignChannel {
+  email
+  whatsapp
+}
+
+enum CampaignStatus {
+  draft
+  scheduled
+  sending
+  sent
+  failed
+}
+
+enum CampaignAudience {
+  leads
+  users_active
+  users_preview
+  users_all
+}
+
+enum DeliveryStatus {
+  queued
+  sent
+  failed
+  skipped_no_optin
+  skipped_no_contact
+}
+
 // ==========================================================
 // TENANT / USUARIO
 // ==========================================================
@@ -96,9 +131,13 @@ model User {
   id           String    @id @default(uuid()) @db.Uuid
   tenantId     String    @map("tenant_id") @db.Uuid
   email        String
-  passwordHash String    @map("password_hash")
+  passwordHash String?   @map("password_hash")
   name         String
   role         UserRole  @default(member)
+  googleId     String?   @unique @map("google_id")
+  avatarUrl    String?   @map("avatar_url")
+  optInEmail   Boolean   @default(false) @map("opt_in_email")
+  optInWhatsapp Boolean  @default(false) @map("opt_in_whatsapp")
   lastLogin    DateTime? @map("last_login")
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
@@ -106,10 +145,13 @@ model User {
 
   tenant    Tenant     @relation(fields: [tenantId], references: [id])
   auditLogs AuditLog[]
+  consents  Consent[]
+  deliveries CampaignDelivery[]
 
   @@unique([email, tenantId])
   @@index([tenantId])
   @@index([role])
+  @@index([googleId])
   @@map("users")
 }
 
@@ -321,10 +363,88 @@ model Lead {
   whatsapp    String
   sport       String
   source      String?
+  optInEmail  Boolean   @default(false) @map("opt_in_email")
+  optInWhatsapp Boolean @default(false) @map("opt_in_whatsapp")
   convertedAt DateTime? @map("converted_at")
   createdAt   DateTime  @default(now()) @map("created_at")
+
+  deliveries CampaignDelivery[]
 
   @@index([email])
   @@index([convertedAt])
   @@map("leads")
+}
+
+// ==========================================================
+// CONSENTIMENTOS (LGPD)
+// ==========================================================
+// Cada aceite gera uma linha imutavel com versao da politica, IP e user
+// agent. Revogar = criar novo Consent com accepted=false.
+model Consent {
+  id          String      @id @default(uuid()) @db.Uuid
+  userId      String?     @map("user_id") @db.Uuid
+  leadId      String?     @map("lead_id") @db.Uuid
+  tenantId    String?     @map("tenant_id") @db.Uuid
+  kind        ConsentKind
+  accepted    Boolean
+  version     String
+  ipAddress   String?     @map("ip_address")
+  userAgent   String?     @map("user_agent")
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([leadId])
+  @@index([kind])
+  @@map("consents")
+}
+
+// ==========================================================
+// CAMPANHAS DE MARKETING (SuperAdmin)
+// ==========================================================
+model Campaign {
+  id          String           @id @default(uuid()) @db.Uuid
+  title       String
+  channel     CampaignChannel
+  audience    CampaignAudience
+  subject     String?
+  body        String
+  status      CampaignStatus   @default(draft)
+  scheduledAt DateTime?        @map("scheduled_at")
+  sentAt      DateTime?        @map("sent_at")
+  sentCount   Int              @default(0) @map("sent_count")
+  skippedCount Int             @default(0) @map("skipped_count")
+  failedCount Int              @default(0) @map("failed_count")
+  createdBy   String           @map("created_by") @db.Uuid
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  deliveries CampaignDelivery[]
+
+  @@index([status])
+  @@map("campaigns")
+}
+
+model CampaignDelivery {
+  id         String         @id @default(uuid()) @db.Uuid
+  campaignId String         @map("campaign_id") @db.Uuid
+  userId     String?        @map("user_id") @db.Uuid
+  leadId     String?        @map("lead_id") @db.Uuid
+  channel    CampaignChannel
+  contact    String
+  status     DeliveryStatus
+  errorMessage String?      @map("error_message")
+  sentAt     DateTime?      @map("sent_at")
+  createdAt  DateTime       @default(now()) @map("created_at")
+
+  campaign Campaign @relation(fields: [campaignId], references: [id])
+  user     User?    @relation(fields: [userId], references: [id])
+  lead     Lead?    @relation(fields: [leadId], references: [id])
+
+  @@index([campaignId])
+  @@index([userId])
+  @@index([leadId])
+  @@index([status])
+  @@map("campaign_deliveries")
 }

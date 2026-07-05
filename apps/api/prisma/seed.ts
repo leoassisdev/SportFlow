@@ -3,32 +3,46 @@ import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-async function main() {
-  const passwordHash = await bcrypt.hash('sportflow2026@#', 12);
+// Credenciais dev vem de env vars (com fallback pra facilitar). Rotacionar
+// em prod. Ver docs/COFRE.md e .cofre/admins.md
+const LEO_ADMIN_EMAIL = process.env.SEED_LEO_EMAIL ?? 'leo@dev';
+const LEO_ADMIN_PASSWORD = process.env.SEED_LEO_PASSWORD ?? 'leo2026!@';
+const DEMO_OWNER_EMAIL = process.env.SEED_DEMO_EMAIL ?? 'organizador@ligadobairro.com';
+const DEMO_OWNER_PASSWORD = process.env.SEED_DEMO_PASSWORD ?? 'sportflow2026@#';
 
+async function main() {
+  const [leoHash, demoHash] = await Promise.all([
+    bcrypt.hash(LEO_ADMIN_PASSWORD, 12),
+    bcrypt.hash(DEMO_OWNER_PASSWORD, 12),
+  ]);
+
+  // SuperAdmin FlowCore (Leo)
   const superadminTenant = await prisma.tenant.upsert({
     where: { slug: 'flowcore-admin' },
     update: {},
     create: {
       slug: 'flowcore-admin',
       name: 'FlowCore Admin',
-      email: 'admin@sportflow.com.br',
+      email: LEO_ADMIN_EMAIL,
       status: 'active',
     },
   });
 
   await prisma.user.upsert({
-    where: { email_tenantId: { email: 'leo@sportflow.com.br', tenantId: superadminTenant.id } },
-    update: {},
+    where: { email_tenantId: { email: LEO_ADMIN_EMAIL, tenantId: superadminTenant.id } },
+    update: { passwordHash: leoHash, role: 'superadmin' },
     create: {
       tenantId: superadminTenant.id,
-      email: 'leo@sportflow.com.br',
-      passwordHash,
+      email: LEO_ADMIN_EMAIL,
+      passwordHash: leoHash,
       name: 'Leonardo (SuperAdmin)',
       role: 'superadmin',
     },
   });
 
+  console.log(`SuperAdmin: ${LEO_ADMIN_EMAIL}`);
+
+  // Tenant Demo (para testar login como owner comum)
   const demoTenant = await prisma.tenant.upsert({
     where: { slug: 'liga-do-bairro-demo' },
     update: {},
@@ -42,14 +56,16 @@ async function main() {
   });
 
   await prisma.user.upsert({
-    where: { email_tenantId: { email: 'organizador@ligadobairro.com', tenantId: demoTenant.id } },
-    update: {},
+    where: { email_tenantId: { email: DEMO_OWNER_EMAIL, tenantId: demoTenant.id } },
+    update: { passwordHash: demoHash },
     create: {
       tenantId: demoTenant.id,
-      email: 'organizador@ligadobairro.com',
-      passwordHash,
+      email: DEMO_OWNER_EMAIL,
+      passwordHash: demoHash,
       name: 'Organizador Demo',
       role: 'owner',
+      optInEmail: false,
+      optInWhatsapp: false,
     },
   });
 
@@ -67,6 +83,7 @@ async function main() {
     },
   });
 
+  console.log(`Owner demo: ${DEMO_OWNER_EMAIL}`);
   console.log('seed OK');
 }
 

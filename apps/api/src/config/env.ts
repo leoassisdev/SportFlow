@@ -11,6 +11,13 @@ const envSchema = z.object({
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
   STRIPE_SECRET_KEY: z.string().startsWith('sk_').optional(),
   STRIPE_WEBHOOK_SECRET: z.string().startsWith('whsec_').optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  GOOGLE_REDIRECT_URI: z
+    .string()
+    .url()
+    .default('http://localhost:3001/api/v1/auth/google/callback'),
+  PRIVACY_POLICY_VERSION: z.string().default('2026-07-05-v1'),
   CORS_ORIGINS: z
     .string()
     .default('http://localhost:3000')
