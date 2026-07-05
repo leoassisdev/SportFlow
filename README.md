@@ -43,6 +43,19 @@ O SportFlow permite que **organizadores de eventos esportivos** (Contratantes) c
 
 ---
 
+## Esportes Suportados (MVP)
+
+| Esporte | Motor de Placar | Timer | Configuracao |
+|---------|-----------------|-------|--------------|
+| **Futebol** | Gols | Sim | 2 tempos x 45min, max 32 participantes |
+| **Volei** | Sets + pontos | Nao | 3 sets, 25 pts/set, max 16 participantes |
+| **Tenis** | Sets + games (15/30/40) | Nao | Best-of-3 sets, 6 games/set, tie-break em 6-6, max 64 |
+| **Skate** | Notas de juizes | Nao | 3 rounds, nota max 100, max 64 participantes |
+
+Novos esportes sao adicionados via `apps/api/src/modules/championship/sport-presets.ts` sem alterar schema — o campo `rulesConfig` (JSONB) suporta qualquer configuracao.
+
+---
+
 ## Estrutura do Monorepo
 
 ```
