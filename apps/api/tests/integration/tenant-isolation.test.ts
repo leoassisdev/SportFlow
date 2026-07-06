@@ -14,11 +14,9 @@ describe('tenant isolation (RN-007)', () => {
   let championshipAId = '';
 
   beforeAll(async () => {
-    // limpa dados residuais do teste (idempotente)
-    await prisma.championship.deleteMany({ where: { name: { startsWith: 'ISO-' } } });
-    await prisma.lead.deleteMany({ where: { email: { in: ['isoa@test.com', 'isob@test.com'] } } });
-    await prisma.user.deleteMany({ where: { email: { in: ['isoa@test.com', 'isob@test.com'] } } });
-    await prisma.tenant.deleteMany({ where: { slug: { startsWith: 'iso-' } } });
+    const { cleanTenantsByPrefix, cleanLeadsByEmail } = await import('../helpers/cleanup.js');
+    await cleanTenantsByPrefix('iso-');
+    await cleanLeadsByEmail(['isoa@test.com', 'isob@test.com']);
 
     const rA = await request(app).post('/api/v1/auth/register').send({
       name: 'Owner A',
@@ -27,6 +25,9 @@ describe('tenant isolation (RN-007)', () => {
       whatsapp: '11 90000-1111',
       sport: 'futebol',
       organizationName: 'ISO-A Liga',
+      acceptPrivacy: true,
+      acceptEmailMarketing: false,
+      acceptWhatsappMarketing: false,
     });
     expect(rA.status).toBe(201);
     cookiesA = (rA.headers['set-cookie'] as unknown as string[]).join('; ');
@@ -38,6 +39,9 @@ describe('tenant isolation (RN-007)', () => {
       whatsapp: '11 90000-2222',
       sport: 'volei',
       organizationName: 'ISO-B Liga',
+      acceptPrivacy: true,
+      acceptEmailMarketing: false,
+      acceptWhatsappMarketing: false,
     });
     expect(rB.status).toBe(201);
     cookiesB = (rB.headers['set-cookie'] as unknown as string[]).join('; ');

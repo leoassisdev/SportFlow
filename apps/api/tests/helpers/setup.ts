@@ -5,3 +5,4 @@ process.env.REDIS_URL ??= 'redis://localhost:6379';
 process.env.JWT_ACCESS_SECRET ??= 'test-access-secret-com-32-caracteres-ok-1234567890';
 process.env.JWT_REFRESH_SECRET ??= 'test-refresh-secret-com-32-caracteres-ok-1234567890';
 process.env.CORS_ORIGINS ??= 'http://localhost:3000';
+process.env.LOG_LEVEL ??= 'silent';
