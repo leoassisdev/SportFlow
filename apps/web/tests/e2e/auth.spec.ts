@@ -4,7 +4,7 @@ test.describe('Auth flow', () => {
   test('landing tem CTA de cadastro', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toContainText('Placar ao vivo');
-    await expect(page.getByRole('link', { name: /Comecar teste gratis/i }).first()).toBeVisible();
+    await expect(page.getByRole('link', { name: /Come[çc]ar teste gr[áa]tis/i }).first()).toBeVisible();
   });
 
   test('login page mostra Google button + form', async ({ page }) => {

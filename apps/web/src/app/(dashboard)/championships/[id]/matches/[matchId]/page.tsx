@@ -3,7 +3,15 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMatchDetail, useMatchLiveState, useUpdateScore, useUpdateTimer } from '@/hooks/useMatchAdmin';
+import {
+  useFinishMatch,
+  useMatchDetail,
+  useMatchHistory,
+  useMatchLiveState,
+  useUndoLast,
+  useUpdateScore,
+  useUpdateTimer,
+} from '@/hooks/useMatchAdmin';
 import { asApiError } from '@/lib/api';
 
 const fmtTimer = (s: number) => {
@@ -17,6 +25,9 @@ export default function MatchAdminPage({ params }: { params: { id: string; match
   const live = useMatchLiveState(match);
   const updateScore = useUpdateScore(params.matchId);
   const updateTimer = useUpdateTimer(params.matchId);
+  const undo = useUndoLast(params.matchId);
+  const finish = useFinishMatch(params.matchId);
+  const history = useMatchHistory(params.matchId);
   const [err, setErr] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
 
@@ -141,11 +152,15 @@ export default function MatchAdminPage({ params }: { params: { id: string; match
             <button
               className="btn-primary"
               onClick={() => doTimer(timerRunning ? 'pause' : 'start')}
-              disabled={updateTimer.isPending}
+              disabled={updateTimer.isPending || match.status === 'finished'}
             >
               {timerRunning ? '⏸ Pausar' : '▶ Iniciar'}
             </button>
-            <button className="btn-ghost" onClick={() => doTimer('reset')} disabled={updateTimer.isPending}>
+            <button
+              className="btn-ghost"
+              onClick={() => doTimer('reset')}
+              disabled={updateTimer.isPending || match.status === 'finished'}
+            >
               ↺ Reset
             </button>
           </div>
@@ -154,14 +169,67 @@ export default function MatchAdminPage({ params }: { params: { id: string; match
           </p>
         </div>
         <div className="card">
-          <h2 className="font-display text-lg font-bold">Compartilhamento</h2>
-          <p className="mt-2 text-xs text-ink-100">Envie este link para os espectadores:</p>
-          <div className="mt-3 flex items-center gap-2 rounded-xl border border-ink-800 bg-ink-950 p-2">
-            <code className="flex-1 truncate font-mono text-xs text-brand-300">{shareUrl}</code>
-            <button className="btn-primary text-xs" onClick={() => navigator.clipboard.writeText(shareUrl)}>
-              Copiar
+          <h2 className="font-display text-lg font-bold">Ações do jogo</h2>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button
+              className="btn-ghost"
+              onClick={() => undo.mutate()}
+              disabled={undo.isPending || match.status === 'finished'}
+              title="Desfaz o último lançamento de placar"
+            >
+              ↶ Desfazer último
+            </button>
+            <button
+              className="btn-accent"
+              onClick={() => {
+                if (confirm('Encerrar este jogo? Após finalizar, o placar fica congelado.')) {
+                  finish.mutate();
+                }
+              }}
+              disabled={finish.isPending || match.status === 'finished'}
+            >
+              🏁 Finalizar jogo
             </button>
           </div>
+          {match.status === 'finished' ? (
+            <p className="mt-3 text-xs text-success">Jogo finalizado. Placar congelado.</p>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="card">
+        <h2 className="font-display text-lg font-bold">Histórico de lançamentos</h2>
+        {history.isLoading ? (
+          <p className="mt-3 text-xs text-ink-100">Carregando…</p>
+        ) : (history.data ?? []).length === 0 ? (
+          <p className="mt-3 text-xs text-ink-100">Nenhum lançamento ainda.</p>
+        ) : (
+          <ul className="mt-3 max-h-64 divide-y divide-ink-800 overflow-y-auto text-sm">
+            {(history.data ?? []).map((h) => (
+              <li key={h.id} className="flex items-center justify-between py-2">
+                <div>
+                  <span className="font-medium">{h.participant.name}</span>{' '}
+                  <span className={h.delta >= 0 ? 'text-success' : 'text-warning'}>
+                    {h.delta >= 0 ? `+${h.delta}` : h.delta}
+                  </span>
+                </div>
+                <span className="font-mono text-xs text-ink-100">
+                  {new Date(h.createdAt).toLocaleTimeString('pt-BR')}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      <div className="card">
+        <h2 className="font-display text-lg font-bold">Compartilhamento</h2>
+        <p className="mt-2 text-xs text-ink-100">Envie este link para os espectadores:</p>
+        <div className="mt-3 flex items-center gap-2 rounded-xl border border-ink-800 bg-ink-950 p-2">
+          <code className="flex-1 truncate font-mono text-xs text-brand-300">{shareUrl}</code>
+          <button className="btn-primary text-xs" onClick={() => navigator.clipboard.writeText(shareUrl)}>
+            Copiar
+          </button>
         </div>
       </div>
 

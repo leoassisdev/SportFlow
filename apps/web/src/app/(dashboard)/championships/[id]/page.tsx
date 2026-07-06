@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useChampionship } from '@/hooks/useChampionships';
+import { useRouter } from 'next/navigation';
+import { useChampionship, useDeleteChampionship, useUpdateChampionship } from '@/hooks/useChampionships';
 import { SPORT_LABEL, type SportKey } from '@/lib/constants';
 import { participantService } from '@/services/participant.service';
 import { matchService } from '@/services/match.service';
@@ -11,7 +12,10 @@ import { asApiError } from '@/lib/api';
 
 export default function ChampionshipDetailPage({ params }: { params: { id: string } }) {
   const qc = useQueryClient();
+  const router = useRouter();
   const { data, isLoading, error } = useChampionship(params.id);
+  const update = useUpdateChampionship(params.id);
+  const remove = useDeleteChampionship();
   const participants = useQuery({
     queryKey: ['participants', params.id],
     queryFn: () => participantService.list(params.id),
@@ -26,10 +30,47 @@ export default function ChampionshipDetailPage({ params }: { params: { id: strin
   });
 
   const [showModal, setShowModal] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [editForm, setEditForm] = useState({ name: '', startDate: '', endDate: '' });
   const [home, setHome] = useState('');
   const [away, setAway] = useState('');
   const [when, setWhen] = useState('');
   const [err, setErr] = useState<string | null>(null);
+
+  const openEdit = () => {
+    if (!data) return;
+    setEditForm({
+      name: data.name,
+      startDate: data.startDate ? data.startDate.slice(0, 10) : '',
+      endDate: data.endDate ? data.endDate.slice(0, 10) : '',
+    });
+    setShowEdit(true);
+  };
+
+  const submitEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErr(null);
+    try {
+      await update.mutateAsync({
+        name: editForm.name,
+        startDate: editForm.startDate || undefined,
+        endDate: editForm.endDate || undefined,
+      });
+      setShowEdit(false);
+    } catch (e) {
+      setErr(asApiError(e).message);
+    }
+  };
+
+  const doDelete = async () => {
+    if (!confirm(`Excluir o campeonato "${data?.name}"? Esta ação não pode ser desfeita.`)) return;
+    try {
+      await remove.mutateAsync(params.id);
+      router.push('/championships');
+    } catch (e) {
+      setErr(asApiError(e).message);
+    }
+  };
 
   const submitMatch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,6 +143,12 @@ export default function ChampionshipDetailPage({ params }: { params: { id: strin
           </Link>
           <button className="btn-accent text-xs" onClick={() => setShowModal(true)} disabled={partList.length < 2}>
             + Novo jogo
+          </button>
+          <button className="btn-ghost text-xs" onClick={openEdit}>
+            ✏️ Editar
+          </button>
+          <button className="text-xs text-danger hover:text-danger/80" onClick={doDelete}>
+            🗑️
           </button>
         </div>
       </div>
@@ -183,6 +230,52 @@ export default function ChampionshipDetailPage({ params }: { params: { id: strin
           )}
         </div>
       </div>
+
+      {showEdit ? (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-ink-950/80 p-6 backdrop-blur">
+          <div className="w-full max-w-md">
+            <form onSubmit={submitEdit} className="card space-y-3">
+              <h2 className="font-display text-xl font-bold">Editar campeonato</h2>
+              <input
+                className="input-base"
+                placeholder="Nome"
+                value={editForm.name}
+                onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                required
+              />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-xs uppercase text-ink-100">Início</label>
+                  <input
+                    className="input-base"
+                    type="date"
+                    value={editForm.startDate}
+                    onChange={(e) => setEditForm({ ...editForm, startDate: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs uppercase text-ink-100">Fim</label>
+                  <input
+                    className="input-base"
+                    type="date"
+                    value={editForm.endDate}
+                    onChange={(e) => setEditForm({ ...editForm, endDate: e.target.value })}
+                  />
+                </div>
+              </div>
+              {err ? <p className="text-sm text-danger">{err}</p> : null}
+              <div className="flex justify-end gap-2">
+                <button type="button" className="btn-ghost" onClick={() => setShowEdit(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-accent" disabled={update.isPending}>
+                  {update.isPending ? 'Salvando…' : 'Salvar'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
 
       {showModal ? (
         <div className="fixed inset-0 z-50 grid place-items-center bg-ink-950/80 p-6 backdrop-blur">

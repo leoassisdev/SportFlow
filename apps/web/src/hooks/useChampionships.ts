@@ -24,3 +24,23 @@ export const useCreateChampionship = () => {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['championships'] }),
   });
 };
+
+export const useUpdateChampionship = (id: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: { name?: string; startDate?: string; endDate?: string; status?: string }) =>
+      championshipService.update(id, input),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['championship', id] });
+      qc.invalidateQueries({ queryKey: ['championships'] });
+    },
+  });
+};
+
+export const useDeleteChampionship = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => championshipService.remove(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['championships'] }),
+  });
+};

@@ -147,4 +147,90 @@ export const matchService = {
 
     return updated;
   },
+
+  async finish(tenantId: string, id: string) {
+    const match = await prisma.match.findFirst({
+      where: { id, tenantId },
+      select: { id: true, liveToken: true, status: true, timerRunning: true, timerSeconds: true, timerStartedAt: true },
+    });
+    if (!match) throw new NotFoundError('Jogo');
+    if (match.status === 'finished' || match.status === 'cancelled') {
+      throw new ConflictError('Jogo já encerrado');
+    }
+    // congela o timer no momento do finish
+    let seconds = match.timerSeconds;
+    if (match.timerRunning && match.timerStartedAt) {
+      seconds += Math.floor((Date.now() - match.timerStartedAt.getTime()) / 1000);
+    }
+    return prisma.match.update({
+      where: { id },
+      data: {
+        status: 'finished',
+        timerRunning: false,
+        timerSeconds: seconds,
+        timerStartedAt: null,
+        finishedAt: new Date(),
+      },
+    });
+  },
+
+  async undoLast(tenantId: string, id: string, userId: string) {
+    const match = await prisma.match.findFirst({
+      where: { id, tenantId },
+      select: { id: true, liveToken: true, homeScore: true, awayScore: true, homeParticipantId: true, awayParticipantId: true, status: true },
+    });
+    if (!match) throw new NotFoundError('Jogo');
+    if (match.status === 'finished' || match.status === 'cancelled') {
+      throw new ConflictError('Jogo já encerrado');
+    }
+
+    const last = await prisma.scoreEntry.findFirst({
+      where: { matchId: id, tenantId },
+      orderBy: { createdAt: 'desc' },
+    });
+    if (!last) throw new NotFoundError('Nenhum lançamento para desfazer');
+
+    const isHome = last.participantId === match.homeParticipantId;
+    const nextHome = isHome ? Math.max(0, match.homeScore - last.delta) : match.homeScore;
+    const nextAway = !isHome ? Math.max(0, match.awayScore - last.delta) : match.awayScore;
+
+    const [_undo, updated] = await prisma.$transaction([
+      prisma.scoreEntry.create({
+        data: {
+          matchId: id,
+          tenantId,
+          participantId: last.participantId,
+          delta: -last.delta,
+          scoreData: { home: nextHome, away: nextAway } as unknown as any,
+          updatedBy: userId,
+        },
+      }),
+      prisma.match.update({
+        where: { id },
+        data: { homeScore: nextHome, awayScore: nextAway },
+      }),
+    ]);
+
+    await publishMatchEvent({
+      type: 'score:updated',
+      matchId: id,
+      liveToken: match.liveToken,
+      homeScore: nextHome,
+      awayScore: nextAway,
+      lastEntry: { participantId: last.participantId, delta: -last.delta, at: new Date().toISOString() },
+    });
+
+    return updated;
+  },
+
+  async listScoreHistory(tenantId: string, id: string) {
+    return prisma.scoreEntry.findMany({
+      where: { matchId: id, tenantId },
+      orderBy: { createdAt: 'desc' },
+      take: 30,
+      include: {
+        participant: { select: { id: true, name: true } },
+      },
+    });
+  },
 };

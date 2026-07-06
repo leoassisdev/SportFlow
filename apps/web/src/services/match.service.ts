@@ -28,6 +28,15 @@ export interface MatchListItem {
   awayParticipant: { id: string; name: string };
 }
 
+export interface ScoreHistoryEntry {
+  id: string;
+  matchId: string;
+  participantId: string;
+  delta: number;
+  createdAt: string;
+  participant: { id: string; name: string };
+}
+
 export const matchService = {
   list: (championshipId: string) =>
     api
@@ -44,4 +53,8 @@ export const matchService = {
     api.patch(`/api/v1/matches/${id}/score`, { participantId, delta }).then((r) => r.data),
   updateTimer: (id: string, action: 'start' | 'pause' | 'reset') =>
     api.patch(`/api/v1/matches/${id}/timer`, { action }).then((r) => r.data),
+  undoLast: (id: string) => api.post(`/api/v1/matches/${id}/score/undo`).then((r) => r.data),
+  finish: (id: string) => api.post(`/api/v1/matches/${id}/finish`).then((r) => r.data),
+  history: (id: string) =>
+    api.get<{ items: ScoreHistoryEntry[] }>(`/api/v1/matches/${id}/history`).then((r) => r.data.items),
 };

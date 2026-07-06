@@ -51,4 +51,21 @@ export const matchController = {
     const updated = await matchService.updateTimer(tenantOf(req), requireId(req), input);
     res.json(updated);
   },
+
+  async finish(req: Request, res: Response) {
+    const updated = await matchService.finish(tenantOf(req), requireId(req));
+    res.json(updated);
+  },
+
+  async undoLast(req: Request, res: Response) {
+    const userId = req.user?.sub;
+    if (!userId) throw new UnauthorizedError();
+    const updated = await matchService.undoLast(tenantOf(req), requireId(req), userId);
+    res.json(updated);
+  },
+
+  async listHistory(req: Request, res: Response) {
+    const items = await matchService.listScoreHistory(tenantOf(req), requireId(req));
+    res.json({ items });
+  },
 };

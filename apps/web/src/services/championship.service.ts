@@ -32,5 +32,10 @@ export const championshipService = {
   create: (input: { name: string; sportType: string; startDate?: string; endDate?: string }) =>
     api.post<Championship>('/api/v1/championships', input).then((r) => r.data),
 
+  update: (
+    id: string,
+    input: { name?: string; startDate?: string; endDate?: string; status?: string },
+  ) => api.patch<Championship>(`/api/v1/championships/${id}`, input).then((r) => r.data),
+
   remove: (id: string) => api.delete(`/api/v1/championships/${id}`),
 };

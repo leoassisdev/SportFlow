@@ -30,6 +30,32 @@ export const useUpdateTimer = (id: string) => {
   });
 };
 
+export const useUndoLast = (id: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => matchService.undoLast(id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['match', id] });
+      qc.invalidateQueries({ queryKey: ['match-history', id] });
+    },
+  });
+};
+
+export const useFinishMatch = (id: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => matchService.finish(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['match', id] }),
+  });
+};
+
+export const useMatchHistory = (id: string | undefined) =>
+  useQuery({
+    queryKey: ['match-history', id],
+    queryFn: () => matchService.history(id!),
+    enabled: !!id,
+  });
+
 /**
  * Escuta broadcast Socket.io do match e devolve estado ao vivo.
  * Independente da query REST (o REST fica pra invalidacao pontual).
