@@ -1,3 +1,19 @@
+<!-- ASSINATURA FLOWCORE -->
+```
+    ________              ______
+   / ____/ /___ _      __/ ____/___  ________
+  / /_  / / __ \ | /| / / /   / __ \/ ___/ _ \
+ / __/ / / /_/ / |/ |/ / /___/ /_/ / /  /  __/
+/_/   /_/\____/|__/|__/\____/\____/_/   \___/
+
++-+-+-+-+-+-+-+-+-+
+| S O L U Ç Õ E S |
++-+-+-+-+-+-+-+-+-+
+
+      Desenvolvido por Leonardo Assis
+```
+
+
 # SportFlow — Plataforma SaaS de Gestão Esportiva
 
 **Desenvolvido por FlowCore**
